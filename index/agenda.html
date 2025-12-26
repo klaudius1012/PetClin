@@ -40,10 +40,22 @@
             <button id="btnNovoAgendamento" class="btn btn-primary">
               Novo Agendamento
             </button>
-            <button id="btnGerarAgendaTeste" class="btn btn-primary">
+            <button
+              id="btnGerarAgendaTeste"
+              class="btn btn-neutral"
+              style="margin-left: 10px"
+            >
               Gerar Dados
             </button>
-            <button id="btnLimparAgenda" class="btn btn-primary" style="background-color: #ef4444; border-color: #ef4444; margin-left: 10px;">
+            <button
+              id="btnLimparAgenda"
+              class="btn btn-primary"
+              style="
+                background-color: #ef4444;
+                border-color: #ef4444;
+                margin-left: 10px;
+              "
+            >
               Limpar
             </button>
             <table>
@@ -63,6 +75,7 @@
                 <!-- Preenchido via JS -->
               </tbody>
             </table>
+            <div id="pagination" class="pagination"></div>
           </article>
         </div>
       </section>
@@ -137,6 +150,7 @@
 
     <!-- JS -->
     <script src="../JS/session-auth.js"></script>
+    <script src="../JS/pagination.js"></script>
     <script src="../JS/agenda.js"></script>
   </body>
 </html>

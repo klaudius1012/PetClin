@@ -93,6 +93,17 @@ body {
   background: var(--error-color);
   max-width: 200px;
 }
+
+.btn-neutral {
+  background-color: #6b7280;
+  color: white;
+  max-width: 200px;
+}
+
+.btn-neutral:hover {
+  background-color: #4b5563;
+}
+
 /* --- Formulários e Inputs --- */
 .form-group {
   margin-bottom: 1.25rem;

@@ -24,13 +24,6 @@
   pointer-events: none;
 }
 
-/* --- Botão Gerar Dados --- */
-#btnGerarDados {
-  background-color: #6b7280;
-  color: white;
-  margin-left: 10px;
-}
-
 /* --- Tabela: Linhas e Células --- */
 .row-emergencia {
   background-color: rgba(220, 38, 38, 0.1);
@@ -69,4 +62,41 @@
   border-radius: 5px;
   cursor: pointer;
   margin-right: 5px;
+}
+
+/* --- Paginação --- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color, #ccc);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: var(--text-color, #333);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-weight: 600;
+  color: var(--text-color, #333);
 }

@@ -38,8 +38,14 @@
               >
                 Novo Atendimento
               </button>
-              <button id="btnGerarDados" class="btn">Gerar Dados</button>
-              <button id="btnLimparDados" class="btn" style="background-color: #ef4444; margin-left: 10px;">Limpar</button>
+              <button id="btnGerarDados" class="btn btn-neutral" style="margin-left: 10px;">Gerar Dados</button>
+              <button
+                id="btnLimparDados"
+                class="btn"
+                style="background-color: #ef4444; margin-left: 10px"
+              >
+                Limpar
+              </button>
             </div>
 
             <div class="form-group search-container">
@@ -67,6 +73,7 @@
                 <!-- Preenchido via JS -->
               </tbody>
             </table>
+            <div id="pagination" class="pagination"></div>
           </article>
         </div>
       </section>
@@ -77,6 +84,7 @@
 
     <!-- JS -->
     <script src="../JS/session-auth.js"></script>
+    <script src="../JS/pagination.js"></script>
     <script src="../JS/recepcao.js"></script>
   </body>
 </html>
