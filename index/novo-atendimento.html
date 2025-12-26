@@ -3,206 +3,123 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Novo Atendimento - PetHosp</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background-color: #f8f9fa;
-      }
-      .container {
-        max-width: 900px;
-        margin-top: 30px;
-        margin-bottom: 50px;
-      }
-      .card {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-    </style>
+    <title>Novo Atendimento</title>
+    <link rel="stylesheet" href="../CSS/novo-atendimento.css" />
   </head>
   <body>
-    <nav class="navbar navbar-dark bg-primary mb-4">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="home.html">PetHosp</a>
-        <a href="home.html" class="btn btn-outline-light btn-sm">Voltar</a>
-      </div>
-    </nav>
-
     <div class="container">
-      <div class="card">
-        <div class="card-header bg-white">
-          <h4 class="mb-0">Novo Atendimento</h4>
+      <main class="card">
+        <div class="header-actions">
+          <h2>Novo Atendimento</h2>
+          <a href="recepcao.html" class="btn-back">← Voltar</a>
         </div>
-        <div class="card-body">
-          <form id="formAtendimento">
-            <div class="row mb-3">
-              <div class="col-md-4">
-                <label for="numeroAtendimento" class="form-label"
-                  >Nº Atendimento</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="numeroAtendimento"
-                  readonly
-                />
-              </div>
-              <div class="col-md-4">
-                <label for="veterinario" class="form-label"
-                  >Veterinário Responsável</label
-                >
-                <select class="form-select" id="veterinario" required>
-                  <option value="">Selecione...</option>
-                  <option value="Dr. Silva">Dr. Silva</option>
-                  <option value="Dra. Santos">Dra. Santos</option>
-                  <option value="Plantão">Plantão</option>
-                </select>
-              </div>
-              <div class="col-md-4">
-                <label for="prioridade" class="form-label">Prioridade</label>
-                <select class="form-select" id="prioridade" required>
-                  <option value="Rotina">Rotina</option>
-                  <option value="Urgência">Urgência</option>
-                  <option value="Emergência">Emergência</option>
-                </select>
-              </div>
+
+        <form id="formAtendimento">
+          <div class="form-grid">
+            <!-- Seleção de Tutor e Animal -->
+            <div class="form-group">
+              <label for="tutorSelect">Tutor</label>
+              <select id="tutorSelect" required>
+                <option value="">Carregando tutores...</option>
+                <!-- Preenchido via JS -->
+              </select>
             </div>
 
-            <h5 class="mt-4 mb-3 text-primary">Dados do Paciente</h5>
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="tutor" class="form-label">Tutor</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="tutor"
-                  list="listaTutores"
-                  placeholder="Buscar tutor..."
-                  required
-                />
-                <datalist id="listaTutores"></datalist>
-              </div>
-              <div class="col-md-6">
-                <label for="animal" class="form-label">Animal</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="animal"
-                  list="listaAnimais"
-                  placeholder="Buscar animal..."
-                  required
-                />
-                <datalist id="listaAnimais"></datalist>
-              </div>
+            <div class="form-group">
+              <label for="animalSelect">Animal</label>
+              <select id="animalSelect" required disabled>
+                <option value="">Selecione um tutor primeiro...</option>
+                <!-- Preenchido via JS -->
+              </select>
             </div>
 
-            <!-- Campos ocultos ou readonly preenchidos automaticamente -->
-            <div class="row mb-3 bg-light p-2 rounded">
-              <div class="col-md-3">
-                <label class="form-label small">Espécie</label
-                ><input
-                  type="text"
-                  class="form-control form-control-sm"
-                  id="especie"
-                  readonly
-                />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label small">Raça</label
-                ><input
-                  type="text"
-                  class="form-control form-control-sm"
-                  id="raca"
-                  readonly
-                />
-              </div>
-              <div class="col-md-2">
-                <label class="form-label small">Sexo</label
-                ><input
-                  type="text"
-                  class="form-control form-control-sm"
-                  id="sexo"
-                  readonly
-                />
-              </div>
-              <div class="col-md-2">
-                <label class="form-label small">Peso (kg)</label
-                ><input
-                  type="text"
-                  class="form-control form-control-sm"
-                  id="peso"
-                />
-              </div>
-              <div class="col-md-2">
-                <label class="form-label small">Porte</label
-                ><input
-                  type="text"
-                  class="form-control form-control-sm"
-                  id="porte"
-                  readonly
-                />
-              </div>
-              <input type="hidden" id="nascimento" />
-              <input type="hidden" id="condicaoReprodutiva" />
+            <!-- Dados do Agendamento -->
+            <div class="form-group">
+              <label for="veterinarioSelect">Veterinário</label>
+              <select id="veterinarioSelect" required>
+                <option value="">Selecione...</option>
+                <option value="Dr. Silva">Dr. Silva</option>
+                <option value="Dra. Santos">Dra. Santos</option>
+                <option value="Dr. Oliveira">Dr. Oliveira</option>
+                <option value="Plantão">Plantão</option>
+              </select>
             </div>
 
-            <h5 class="mt-4 mb-3 text-primary">Triagem Clínica</h5>
-            <div class="row mb-3">
-              <div class="col-md-12">
-                <label for="motivo" class="form-label"
-                  >Motivo da Consulta</label
-                >
-                <input type="text" class="form-control" id="motivo" required />
-              </div>
+            <div class="form-group">
+              <label for="dataAtendimento">Data</label>
+              <input type="date" id="dataAtendimento" required />
             </div>
 
-            <div class="row mb-3">
-              <div class="col-md-3">
-                <label for="temperatura" class="form-label"
-                  >Temperatura (°C)</label
-                >
-                <input
-                  type="number"
-                  step="0.1"
-                  class="form-control"
-                  id="temperatura"
-                  required
-                />
-                <div class="form-text">Acima de 39.5°C alerta febre alta.</div>
-              </div>
-              <div class="col-md-9">
-                <label for="sintomas" class="form-label"
-                  >Sintomas Relatados</label
-                >
-                <input type="text" class="form-control" id="sintomas" />
-              </div>
+            <div class="form-group">
+              <label for="horaAtendimento">Hora</label>
+              <input type="time" id="horaAtendimento" required />
             </div>
 
-            <div class="mb-3">
-              <label for="observacoes" class="form-label"
-                >Observações Adicionais</label
-              >
+            <!-- Triagem -->
+            <div class="form-group">
+              <label for="peso">Peso (kg)</label>
+              <input
+                type="number"
+                id="peso"
+                step="0.1"
+                min="0"
+                placeholder="0.0"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="temperatura">Temperatura (°C)</label>
+              <input
+                type="number"
+                id="temperatura"
+                step="0.1"
+                min="30"
+                max="45"
+                placeholder="0.0"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="prioridade">Prioridade</label>
+              <select id="prioridade" required>
+                <option value="Rotina">Rotina</option>
+                <option value="Urgência">Urgência</option>
+                <option value="Emergência">Emergência</option>
+              </select>
+            </div>
+
+            <!-- Detalhes Clínicos -->
+            <div class="form-group full-width">
+              <label for="queixa">Queixa Principal</label>
               <textarea
-                class="form-control"
-                id="observacoes"
-                rows="4"
+                id="queixa"
+                rows="3"
+                placeholder="Descreva o motivo da consulta..."
+                required
               ></textarea>
             </div>
 
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-              <a href="home.html" class="btn btn-secondary me-md-2">Cancelar</a>
-              <button type="submit" class="btn btn-success px-5">
-                Salvar Atendimento
-              </button>
+            <div class="form-group full-width">
+              <label for="observacoes">Observações Adicionais</label>
+              <textarea
+                id="observacoes"
+                rows="3"
+                placeholder="Histórico, alergias ou outras observações..."
+              ></textarea>
             </div>
-          </form>
-        </div>
-      </div>
+          </div>
+
+          <div class="btn-toolbar">
+            <a href="recepcao.html" class="btn-cancel">Cancelar</a>
+            <button type="submit" class="btn btn-primary">
+              Salvar Atendimento
+            </button>
+          </div>
+        </form>
+      </main>
     </div>
 
-    <script src="JS/session-auth.js"></script>
-    <script src="JS/novo-atendimento.js"></script>
+    <script src="../JS/session-auth.js"></script>
+    <script src="../JS/novo-atendimento.js"></script>
   </body>
 </html>

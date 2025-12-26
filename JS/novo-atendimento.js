@@ -1,155 +1,122 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Referências aos elementos do DOM
   const form = document.getElementById("formAtendimento");
-  const campoNumero = document.getElementById("numeroAtendimento");
-  const campoTemperatura = document.getElementById("temperatura");
-  const campoPrioridade = document.getElementById("prioridade");
-
-  // Elementos para filtro de Tutor/Animal
-  const inputTutor = document.getElementById("tutor");
-  const inputAnimal = document.getElementById("animal");
-  const listaTutores = document.getElementById("listaTutores");
-  const listaAnimais = document.getElementById("listaAnimais");
+  const selectTutor = document.getElementById("tutorSelect");
+  const selectAnimal = document.getElementById("animalSelect");
+  const selectVeterinario = document.getElementById("veterinarioSelect");
+  const inputData = document.getElementById("dataAtendimento");
+  const inputHora = document.getElementById("horaAtendimento");
+  const inputPeso = document.getElementById("peso");
+  const inputTemperatura = document.getElementById("temperatura");
+  const selectPrioridade = document.getElementById("prioridade");
+  const textQueixa = document.getElementById("queixa");
+  const textObservacoes = document.getElementById("observacoes");
 
   // Carregar dados do localStorage
   const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
   const animais = JSON.parse(localStorage.getItem("animais")) || [];
 
-  // Popular datalist de Tutores
+  // 1. Preencher Select de Tutores
+  selectTutor.innerHTML = '<option value="">Selecione...</option>';
   tutores.forEach((t) => {
     const option = document.createElement("option");
     option.value = t.nome;
-    listaTutores.appendChild(option);
+    option.textContent = t.nome;
+    option.dataset.id = t.id; // Guarda o ID no dataset para busca
+    selectTutor.appendChild(option);
   });
 
-  // Filtrar Animais ao selecionar Tutor
-  inputTutor.addEventListener("input", function () {
-    const tutorNome = this.value;
-    listaAnimais.innerHTML = ""; // Limpa lista anterior
-    inputAnimal.value = ""; // Limpa campo animal para evitar inconsistência
+  // 2. Lógica de Dependência Tutor -> Animal
+  selectTutor.addEventListener("change", function () {
+    const selectedOption = this.options[this.selectedIndex];
+    const tutorId = selectedOption.dataset.id;
 
-    if (tutorNome) {
-      // Busca o objeto tutor pelo nome para obter o ID
-      const tutorObj = tutores.find((t) => t.nome === tutorNome);
+    // Resetar select de animais
+    selectAnimal.innerHTML =
+      '<option value="">Selecione um tutor primeiro...</option>';
+    selectAnimal.disabled = true;
 
-      if (tutorObj) {
-        // Filtra animais vinculados ao ID do tutor
-        const animaisFiltrados = animais.filter(
-          (a) => a.tutorId === tutorObj.id
-        );
+    if (tutorId) {
+      // Filtrar animais deste tutor
+      const petsDoTutor = animais.filter((a) => a.tutorId == tutorId);
 
-        animaisFiltrados.forEach((a) => {
+      if (petsDoTutor.length > 0) {
+        selectAnimal.disabled = false;
+        selectAnimal.innerHTML =
+          '<option value="">Selecione o animal...</option>';
+
+        petsDoTutor.forEach((a) => {
           const option = document.createElement("option");
           option.value = a.nome;
-          listaAnimais.appendChild(option);
+          option.textContent = a.nome;
+          selectAnimal.appendChild(option);
         });
+      } else {
+        selectAnimal.innerHTML =
+          '<option value="">Nenhum animal encontrado</option>';
       }
     }
   });
 
-  // Preencher dados do animal automaticamente ao selecionar
-  inputAnimal.addEventListener("change", function () {
-    const animalNome = this.value;
-    const tutorNome = inputTutor.value;
-    const tutorObj = tutores.find((t) => t.nome === tutorNome);
-
-    if (!tutorObj) return;
-
-    const animal = animais.find(
-      (a) => a.nome === animalNome && a.tutorId === tutorObj.id
-    );
-
-    if (animal) {
-      if (document.getElementById("especie"))
-        document.getElementById("especie").value = animal.especie || "";
-      if (document.getElementById("raca"))
-        document.getElementById("raca").value = animal.raca || "";
-      if (document.getElementById("sexo"))
-        document.getElementById("sexo").value = animal.sexo || "";
-      if (document.getElementById("nascimento"))
-        document.getElementById("nascimento").value = animal.nascimento || "";
-      if (document.getElementById("peso"))
-        document.getElementById("peso").value = animal.peso || "";
-      if (document.getElementById("porte"))
-        document.getElementById("porte").value = animal.porte || "";
-      if (document.getElementById("condicaoReprodutiva"))
-        document.getElementById("condicaoReprodutiva").value =
-          animal.condicaoReprodutiva || "";
-    }
-  });
-
-  // 1. Gerar Número do Atendimento automaticamente
-  // Gera um ID baseado no timestamp atual + número aleatório
-  const novoId =
-    "AT" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 100);
-  campoNumero.value = novoId;
-
-  // 2. Validação de Febre Alta
-  campoTemperatura.addEventListener("change", function () {
+  // 3. Validação de Temperatura (Febre Alta)
+  inputTemperatura.addEventListener("change", function () {
     const temperatura = parseFloat(this.value);
 
-    // Verifica se é um número válido e se é febre alta
+    // Limpa estilos anteriores
+    this.style.borderColor = "";
+    this.style.backgroundColor = "";
+
     if (!isNaN(temperatura) && temperatura > 39.5) {
-      // Alerta ao usuário
       alert(
         `ALERTA: A temperatura informada (${temperatura}°C) indica febre alta!`
       );
 
-      // Destaque visual no campo
-      this.style.borderColor = "red";
-      this.style.backgroundColor = "#fff0f0";
+      // Destaque visual
+      this.style.borderColor = "#dc2626";
+      this.style.backgroundColor = "#fee2e2";
 
-      // Sugere alteração de prioridade se já não for Emergência
-      if (campoPrioridade.value !== "Emergência") {
-        const aceitaEmergencia = confirm(
-          'Deseja alterar a prioridade do atendimento para "Emergência"?'
+      // Sugestão de mudança de prioridade
+      if (selectPrioridade.value !== "Emergência") {
+        const confirmar = confirm(
+          "Deseja alterar a prioridade para 'Emergência'?"
         );
-        if (aceitaEmergencia) {
-          campoPrioridade.value = "Emergência";
+        if (confirmar) {
+          selectPrioridade.value = "Emergência";
         }
       }
-    } else {
-      // Remove os estilos de alerta se a temperatura for corrigida
-      this.style.borderColor = "";
-      this.style.backgroundColor = "";
     }
   });
 
-  // 3. Salvar Atendimento e Redirecionar
+  // 4. Definir Data/Hora atual como padrão
+  const agora = new Date();
+  agora.setMinutes(agora.getMinutes() - agora.getTimezoneOffset()); // Ajuste fuso
+  const isoString = agora.toISOString();
+  inputData.value = isoString.slice(0, 10);
+  inputHora.value = isoString.slice(11, 16);
+
+  // 5. Salvar Atendimento
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Coleta todos os dados do formulário
     const dadosAtendimento = {
-      id: campoNumero.value,
-      tutor: document.getElementById("tutor").value,
-      animal: document.getElementById("animal").value,
-      especie: document.getElementById("especie").value,
-      raca: document.getElementById("raca").value,
-      sexo: document.getElementById("sexo").value,
-      nascimento: document.getElementById("nascimento").value,
-      peso: document.getElementById("peso").value,
-      porte: document.getElementById("porte").value,
-      condicaoReprodutiva: document.getElementById("condicaoReprodutiva").value,
-      veterinario: document.getElementById("veterinario").value,
-      prioridade: campoPrioridade.value,
-      motivo: document.getElementById("motivo").value,
-      temperatura: campoTemperatura.value,
-      sintomas: document.getElementById("sintomas").value,
-      observacoes: document.getElementById("observacoes").value,
-      // Campos de controle do sistema
+      id: "AT" + Date.now(),
+      tutor: selectTutor.value,
+      animal: selectAnimal.value,
+      veterinario: selectVeterinario.value,
+      dataHora: `${inputData.value}T${inputHora.value}`,
+      peso: inputPeso.value,
+      temperatura: inputTemperatura.value,
+      prioridade: selectPrioridade.value,
       status: "Aguardando",
-      dataHora: new Date().toLocaleString("pt-BR"),
-      timestamp: Date.now(),
+      queixa: textQueixa.value,
+      observacoes: textObservacoes.value,
     };
 
-    // Recupera atendimentos existentes ou cria novo array
     const atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
-
-    // Adiciona o novo atendimento e salva
     atendimentos.push(dadosAtendimento);
     localStorage.setItem("atendimentos", JSON.stringify(atendimentos));
 
     alert("Atendimento registrado com sucesso!");
-    window.location.href = "home.html";
+    window.location.href = "recepcao.html";
   });
 });

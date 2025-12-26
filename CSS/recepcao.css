@@ -1,0 +1,32 @@
+@import url("home.css");
+
+/* =========================================
+   ESTILOS ESPECÍFICOS DA RECEPÇÃO
+   ========================================= */
+
+/* --- Ações e Botões --- */
+.actions-container {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* --- Barra de Busca --- */
+.search-container {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Sidebar (Itens Desabilitados) --- */
+.sidebar li.disabled {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* --- Botão Gerar Dados --- */
+#btnGerarDados {
+  background-color: #6b7280;
+  color: white;
+  margin-left: 10px;
+}
