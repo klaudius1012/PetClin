@@ -4,6 +4,12 @@
    ESTILOS ESPECÍFICOS DA PÁGINA DE AGENDA
    ========================================= */
 
+/* Botão de Gerar Dados de Teste */
+#btnGerarAgendaTeste {
+  margin-left: 10px;
+  background-color: #6c757d;
+}
+
 /* Personalização da Tabela de Agenda */
 #view-agenda table {
   border-collapse: separate;
