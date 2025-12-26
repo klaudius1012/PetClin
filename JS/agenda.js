@@ -1,178 +1,245 @@
 document.addEventListener("DOMContentLoaded", () => {
-  renderAgenda();
+  const tbody = document.getElementById("tbody-agenda");
+  const btnGerar = document.getElementById("btnGerarAgendaTeste");
+  const btnNovo = document.getElementById("btnNovoAgendamento");
+  const modal = document.getElementById("modalAgendamento");
+  const btnCancelar = document.getElementById("btnCancelarAgenda");
+  const form = document.getElementById("formAgendamento");
+  const busca = document.getElementById("buscaAgenda");
+  let idEdicao = null;
 
-  // Configuração do Modal
-  const modalAgenda = document.getElementById("modalAgendamento");
-  const btnNovoAgendamento = document.getElementById("btnNovoAgendamento");
-  const btnGerarAgendaTeste = document.getElementById("btnGerarAgendaTeste");
-  const btnCancelarAgenda = document.getElementById("btnCancelarAgenda");
-  const formAgendamento = document.getElementById("formAgendamento");
+  // Carregar dados iniciais
+  carregarAgenda();
+  carregarDatalists();
 
-  if (btnNovoAgendamento) {
-    btnNovoAgendamento.addEventListener("click", () => {
-      modalAgenda.classList.remove("hidden");
-      carregarOpcoesAgenda();
+  // Eventos
+  if (btnGerar) btnGerar.addEventListener("click", gerarDadosTeste);
+
+  if (btnNovo) {
+    btnNovo.addEventListener("click", () => {
+      idEdicao = null;
+      document.querySelector("#modalAgendamento h2").textContent =
+        "Novo Agendamento";
+      form.reset();
+      modal.classList.remove("hidden");
     });
   }
 
-  if (btnGerarAgendaTeste) {
-    btnGerarAgendaTeste.addEventListener("click", gerarAgendaAleatoria);
-  }
-
-  if (btnCancelarAgenda) {
-    btnCancelarAgenda.addEventListener("click", () => {
-      modalAgenda.classList.add("hidden");
-      formAgendamento.reset();
+  if (btnCancelar) {
+    btnCancelar.addEventListener("click", () => {
+      modal.classList.add("hidden");
+      form.reset();
+      idEdicao = null;
     });
   }
 
-  if (formAgendamento) {
-    formAgendamento.addEventListener("submit", (e) => {
+  if (form) {
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
       salvarAgendamento();
     });
   }
-});
 
-function renderAgenda() {
-  const tbody = document.getElementById("tbody-agenda");
-  tbody.innerHTML = "";
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
-  const animais = JSON.parse(localStorage.getItem("animais")) || [];
-
-  agendamentos.forEach((ag) => {
-    const tr = document.createElement("tr");
-
-    // --- Lógica de Cores ---
-    // Adiciona a classe CSS baseada no tipo (ex: "tipo-consulta", "tipo-vacina")
-    if (ag.tipo) {
-      const classeCor = `tipo-${ag.tipo.toLowerCase()}`;
-      tr.classList.add(classeCor);
-    }
-
-    const tutorObj = tutores.find((t) => t.nome === ag.tutor);
-    const animalObj = animais.find((a) => a.nome === ag.animal);
-    const telefone = tutorObj ? tutorObj.telefone : "-";
-    const especie = animalObj ? animalObj.especie : "-";
-
-    tr.innerHTML = `
-      <td>${ag.tutor}</td>
-      <td>${telefone}</td>
-      <td>${ag.animal}</td>
-      <td>${ag.hora}</td>
-      <td>${especie}</td>
-      <td>${ag.veterinario}</td>
-      <td>
-        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')">Excluir</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function carregarOpcoesAgenda() {
-  const listaAnimais = document.getElementById("listaAnimaisAgenda");
-  const listaTutores = document.getElementById("listaTutoresAgenda");
-
-  const animais = JSON.parse(localStorage.getItem("animais")) || [];
-  const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
-
-  listaAnimais.innerHTML = "";
-  animais.forEach((a) => {
-    const opt = document.createElement("option");
-    opt.value = a.nome;
-    listaAnimais.appendChild(opt);
-  });
-
-  listaTutores.innerHTML = "";
-  tutores.forEach((t) => {
-    const opt = document.createElement("option");
-    opt.value = t.nome;
-    listaTutores.appendChild(opt);
-  });
-}
-
-function salvarAgendamento() {
-  const hora = document.getElementById("agendaHora").value;
-  const animal = document.getElementById("agendaAnimal").value;
-  const tutor = document.getElementById("agendaTutor").value;
-  const vet = document.getElementById("agendaVet").value;
-  const tipo = document.getElementById("agendaTipo").value;
-
-  const novoAgendamento = {
-    id: "AG" + Date.now(),
-    hora,
-    animal,
-    tutor,
-    veterinario: vet,
-    tipo,
-  };
-
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  agendamentos.push(novoAgendamento);
-  agendamentos.sort((a, b) => a.hora.localeCompare(b.hora));
-
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-
-  document.getElementById("modalAgendamento").classList.add("hidden");
-  document.getElementById("formAgendamento").reset();
-  renderAgenda();
-}
-
-function excluirAgendamento(id) {
-  if (confirm("Deseja excluir este agendamento?")) {
-    let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-    agendamentos = agendamentos.filter((a) => a.id !== id);
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-    renderAgenda();
-  }
-}
-
-function gerarAgendaAleatoria() {
-  const animais = JSON.parse(localStorage.getItem("animais")) || [];
-  const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
-
-  if (animais.length === 0) {
-    alert("Não há animais cadastrados para gerar agendamentos.");
-    return;
+  if (busca) {
+    busca.addEventListener("input", carregarAgenda);
   }
 
-  const tipos = ["Consulta", "Vacina", "Retorno", "Exame", "Cirurgia"];
-  const veterinarios = ["Dr. Silva", "Dra. Santos", "Dr. João", "Plantão"];
-  const novos = [];
-  const qtd = 3; // Gera 3 agendamentos por vez
+  // Função para carregar e renderizar a tabela
+  function carregarAgenda() {
+    const agenda = JSON.parse(localStorage.getItem("agenda")) || [];
+    const termo = busca ? busca.value.toLowerCase() : "";
 
-  for (let i = 0; i < qtd; i++) {
-    const animal = animais[Math.floor(Math.random() * animais.length)];
-    let tutorNome = animal.tutorNome;
+    tbody.innerHTML = "";
 
-    // Tenta encontrar o nome do tutor se não estiver direto no objeto animal
-    if (!tutorNome && animal.tutorId) {
-      const t = tutores.find((x) => x.id === animal.tutorId);
-      if (t) tutorNome = t.nome;
+    const filtrados = agenda.filter((item) => {
+      const tutor = item.tutor ? item.tutor.toLowerCase() : "";
+      const animal = item.animal ? item.animal.toLowerCase() : "";
+      return tutor.includes(termo) || animal.includes(termo);
+    });
+
+    if (filtrados.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="8" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>';
+      return;
     }
-    // Fallback
-    if (!tutorNome && tutores.length > 0) {
-      tutorNome = tutores[Math.floor(Math.random() * tutores.length)].nome;
-    }
 
-    const h = Math.floor(Math.random() * (18 - 8) + 8);
-    const m = [0, 15, 30, 45][Math.floor(Math.random() * 4)];
-    const hora = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    // Ordenar por hora
+    filtrados.sort((a, b) => a.hora.localeCompare(b.hora));
 
-    novos.push({
-      id: "AG" + Date.now() + i,
-      hora,
-      animal: animal.nome,
-      tutor: tutorNome || "Desconhecido",
-      veterinario: veterinarios[Math.floor(Math.random() * veterinarios.length)],
-      tipo: tipos[Math.floor(Math.random() * tipos.length)],
+    filtrados.forEach((item) => {
+      const tr = document.createElement("tr");
+      tr.style.cursor = "pointer";
+      tr.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return;
+        editarAgendamento(item);
+      });
+
+      tr.innerHTML = `
+        <td>${item.tutor}</td>
+        <td>${item.telefone || "-"}</td>
+        <td>${item.animal}</td>
+        <td>${item.hora}</td>
+        <td>${item.especie || "-"}</td>
+        <td>${item.veterinario}</td>
+        <td>${item.tipo}</td>
+        <td>
+          <button class="btn-icon" onclick="prepararEdicao('${
+            item.id
+          }')" title="Editar" style="cursor:pointer; border:none; background:transparent; margin-right: 5px;">✏️</button>
+          <button class="btn-icon" onclick="excluirAgendamento('${
+            item.id
+          }')" title="Excluir" style="cursor:pointer; border:none; background:transparent;">🗑️</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
     });
   }
 
-  const atuais = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  const final = [...atuais, ...novos].sort((a, b) => a.hora.localeCompare(b.hora));
-  localStorage.setItem("agendamentos", JSON.stringify(final));
-  renderAgenda();
-}
+  // Preparar modal para edição
+  function editarAgendamento(item) {
+    idEdicao = item.id;
+    document.getElementById("agendaHora").value = item.hora;
+    document.getElementById("agendaAnimal").value = item.animal;
+    document.getElementById("agendaTutor").value = item.tutor;
+    document.getElementById("agendaVet").value = item.veterinario;
+    document.getElementById("agendaTipo").value = item.tipo;
+
+    document.querySelector("#modalAgendamento h2").textContent =
+      "Editar Agendamento";
+    modal.classList.remove("hidden");
+  }
+
+  // Salvar novo agendamento
+  function salvarAgendamento() {
+    const agenda = JSON.parse(localStorage.getItem("agenda")) || [];
+    const hora = document.getElementById("agendaHora").value;
+    const animal = document.getElementById("agendaAnimal").value;
+    const tutor = document.getElementById("agendaTutor").value;
+    const vet = document.getElementById("agendaVet").value;
+    const tipo = document.getElementById("agendaTipo").value;
+
+    if (idEdicao) {
+      const index = agenda.findIndex((i) => i.id === idEdicao);
+      if (index !== -1) {
+        agenda[index].hora = hora;
+        agenda[index].animal = animal;
+        agenda[index].tutor = tutor;
+        agenda[index].veterinario = vet;
+        agenda[index].tipo = tipo;
+      }
+    } else {
+      agenda.push({
+        id: Date.now().toString(),
+        hora,
+        animal,
+        tutor,
+        veterinario: vet,
+        tipo,
+        telefone: "(00) 00000-0000",
+        especie: "Desconhecida",
+      });
+    }
+
+    localStorage.setItem("agenda", JSON.stringify(agenda));
+
+    modal.classList.add("hidden");
+    form.reset();
+    idEdicao = null;
+    carregarAgenda();
+  }
+
+  // Gerar dados de teste
+  function gerarDadosTeste() {
+    const dados = [
+      {
+        id: "1",
+        tutor: "Ana Silva",
+        telefone: "(11) 99999-1111",
+        animal: "Rex",
+        hora: "08:00",
+        especie: "Cachorro",
+        veterinario: "Dr. Silva",
+        tipo: "Consulta",
+      },
+      {
+        id: "2",
+        tutor: "Carlos Souza",
+        telefone: "(11) 98888-2222",
+        animal: "Mia",
+        hora: "09:00",
+        especie: "Gato",
+        veterinario: "Dra. Santos",
+        tipo: "Vacina",
+      },
+      {
+        id: "3",
+        tutor: "Beatriz Lima",
+        telefone: "(11) 97777-3333",
+        animal: "Thor",
+        hora: "10:30",
+        especie: "Cachorro",
+        veterinario: "Dr. Silva",
+        tipo: "Retorno",
+      },
+      {
+        id: "4",
+        tutor: "João Mendes",
+        telefone: "(11) 96666-4444",
+        animal: "Lola",
+        hora: "14:00",
+        especie: "Gato",
+        veterinario: "Plantão",
+        tipo: "Exame",
+      },
+      {
+        id: "5",
+        tutor: "Fernanda Costa",
+        telefone: "(11) 95555-5555",
+        animal: "Luna",
+        hora: "15:30",
+        especie: "Gato",
+        veterinario: "Dra. Santos",
+        tipo: "Cirurgia",
+      },
+    ];
+    localStorage.setItem("agenda", JSON.stringify(dados));
+    carregarAgenda();
+  }
+
+  // Preencher datalists para facilitar o cadastro
+  function carregarDatalists() {
+    const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
+    const animais = JSON.parse(localStorage.getItem("animais")) || [];
+
+    const dlTutores = document.getElementById("listaTutoresAgenda");
+    const dlAnimais = document.getElementById("listaAnimaisAgenda");
+
+    if (dlTutores)
+      dlTutores.innerHTML = tutores
+        .map((t) => `<option value="${t.nome}">`)
+        .join("");
+    if (dlAnimais)
+      dlAnimais.innerHTML = animais
+        .map((a) => `<option value="${a.nome}">`)
+        .join("");
+  }
+
+  // Expor excluir globalmente
+  window.excluirAgendamento = function (id) {
+    if (confirm("Deseja excluir este agendamento?")) {
+      const agenda = JSON.parse(localStorage.getItem("agenda")) || [];
+      const novaAgenda = agenda.filter((item) => item.id !== id);
+      localStorage.setItem("agenda", JSON.stringify(novaAgenda));
+      carregarAgenda();
+    }
+  };
+
+  // Expor editar globalmente
+  window.prepararEdicao = function (id) {
+    const agenda = JSON.parse(localStorage.getItem("agenda")) || [];
+    const item = agenda.find((i) => i.id === id);
+    if (item) {
+      editarAgendamento(item);
+    }
+  };
+});
