@@ -22,4 +22,26 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "login.html";
     });
   }
+
+  highlightActiveMenuItem();
 });
+
+function highlightActiveMenuItem() {
+  const path = window.location.pathname;
+  // Pega o nome do arquivo atual (ex: agenda.html)
+  const currentPage = path.split("/").pop();
+
+  const menuItems = document.querySelectorAll(".sidebar li");
+  menuItems.forEach((item) => {
+    // Remove a classe active de todos os itens para garantir limpeza
+    item.classList.remove("active");
+
+    const onclick = item.getAttribute("onclick");
+    if (onclick) {
+      // Verifica se o onclick contém o nome da página atual
+      if (onclick.includes(currentPage)) {
+        item.classList.add("active");
+      }
+    }
+  });
+}
