@@ -1,0 +1,201 @@
+:root {
+  /* --- Variáveis de Cores e Temas --- */
+  --primary-color: #2dd4bf; /* Verde água */
+  --primary-gradient: linear-gradient(
+    135deg,
+    #2dd4bf 0%,
+    #2e7bf7 100%
+  ); /* Azul-esverdeado */
+
+  --secondary-gradient: linear-gradient(
+    135deg,
+    #2dd4bf 0%,
+    #13418a 100%
+  ); /* Azul-esverdeado escuro */
+  --surface: rgba(255, 255, 255, 0.39); /* Translúcido */
+  --text-color: #374151;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --error-color: #ef4444;
+  --bg-overlay: rgba(255, 255, 255, 0.4);
+}
+
+/* --- Configurações Globais e Reset --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: url("../img/fundo_1.png") no-repeat center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Animações --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Componentes Globais --- */
+.card {
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  animation: fadeIn 0.8s ease-out;
+  width: 100%;
+  display: flex;
+}
+
+/* --- Botões --- */
+.btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  max-width: 200px;
+}
+
+.btn-primary:hover {
+  background-color: var(--error-color);
+}
+
+.btn-secondary {
+  background: var(--error-color);
+  max-width: 200px;
+}
+/* --- Formulários e Inputs --- */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem; /* Espaço para ícone à esquerda */
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2);
+  background-color: #fff;
+}
+
+/* --- Wrapper de Input com Ícones --- */
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  padding-right: 2.5rem; /* Espaço para o toggle de senha à direita */
+  padding-left: 2.5rem; /* Espaço para o ícone de cadeado à esquerda */
+}
+
+/* Ícone estático à esquerda */
+.input-icon-left {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  width: 20px;
+}
+
+/* Botão de alternar visibilidade da senha */
+.btn-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.btn-toggle:hover {
+  color: var(--primary-color);
+}
+
+/* --- Ícones de Mostrar/Ocultar Senha --- */
+.icon-eye,
+.icon-eye-off {
+  width: 20px;
+  height: 20px;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icon-eye {
+  background-image: url("../img/ver-senha.png");
+}
+
+.icon-eye-off {
+  background-image: url("../img/nao-ver-senha.png");
+}
+
+.hidden {
+  display: none !important;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

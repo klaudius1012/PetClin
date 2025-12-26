@@ -1,0 +1,133 @@
+@import url("global.css");
+
+/* Sobrescreve o layout do body para permitir rolagem em formulários longos */
+body {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Ajustes no Card para comportar o formulário */
+.card {
+  flex-direction: column;
+  padding: 2.5rem;
+  height: auto;
+}
+
+/* Cabeçalho */
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.header-actions h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.75rem;
+}
+
+.btn-back {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.btn-back:hover {
+  color: var(--primary-color);
+}
+
+/* Grid Responsivo */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Estilização de Textarea (não coberta pelo global.css) */
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: rgba(255, 255, 255, 0.8);
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2);
+  background-color: #fff;
+}
+
+/* Campo Readonly */
+.form-group input[readonly] {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Barra de Botões */
+.btn-toolbar {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+/* Ajuste dos botões dentro da toolbar */
+.btn-toolbar .btn {
+  width: auto;
+  min-width: 140px;
+  margin-top: 0;
+}
+
+.btn-cancel {
+  background-color: #9ca3af;
+  color: white;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cancel:hover {
+  background-color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .btn-toolbar {
+    flex-direction: column;
+  }
+
+  .btn-toolbar .btn,
+  .btn-toolbar .btn-cancel {
+    width: 100%;
+  }
+}

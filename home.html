@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="CSS/home.css" />
+  </head>
+
+  <body>
+    <main class="login-card card">
+      <!-- Coluna Esquerda: Lista de Serviços -->
+      <aside class="sidebar">
+        <h3>Serviços</h3>
+        <ul id="listaServicos">
+          <li class="active" data-key="dashboard">Dashboard</li>
+          <li data-key="agenda">Agenda</li>
+          <li data-key="recepção">Recepção</li>
+          <li data-key="tutores">Tutores</li>
+          <li data-key="animais">Animais</li>
+          <li data-key="atendimento">Atendimento</li>
+          <li data-key="vacinas">Vacinas</li>
+        </ul>
+      </aside>
+
+      <!-- Coluna Direita: Conteúdo -->
+      <section class="content-area">
+        <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
+        <div id="conteudoServico" role="tabpanel">
+          <!-- Módulo: Dashboard -->
+          <article id="view-dashboard">
+            <h2>Dashboard</h2>
+            <p>Bem-vindo ao sistema do Hospital Veterinário.</p>
+            <p>Selecione um módulo no menu ao lado.</p>
+          </article>
+
+          <!-- Módulo: Agenda -->
+          <article id="view-agenda" class="hidden">
+            <h2>Agenda do Dia</h2>
+            <div class="form-group">
+              <input
+                type="search"
+                id="buscaAgenda"
+                placeholder="Buscar por animal ou tutor..."
+              />
+            </div>
+            <button id="btnNovoAgendamento" class="btn btn-primary">
+              Novo Agendamento
+            </button>
+            <table>
+              <thead>
+                <tr>
+                  <th>Hora</th>
+                  <th>Animal</th>
+                  <th>Tutor</th>
+                  <th>Veterinário</th>
+                  <th>Tipo</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-agenda">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </article>
+
+          <!-- Módulo: Recepção -->
+          <article id="view-recepcao" class="hidden">
+            <h2>Recepção - Atendimentos Abertos</h2>
+            <div class="form-group">
+              <input
+                type="search"
+                id="buscaRecepcao"
+                placeholder="Buscar por nome do tutor..."
+              />
+            </div>
+            <button id="btnNovoAtendimento" class="btn btn-primary">
+              Novo Atendimento
+            </button>
+            <table>
+              <thead>
+                <tr>
+                  <th>Hora Chegada</th>
+                  <th>Tutor</th>
+                  <th>Animal</th>
+                  <th>Motivo</th>
+                  <th>Prioridade</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-recepcao"></tbody>
+            </table>
+          </article>
+
+          <!-- Módulo: Tutores -->
+          <article id="view-tutores" class="hidden">
+            <h2>Tutores</h2>
+            <div class="form-group">
+              <input
+                type="search"
+                id="buscaTutor"
+                placeholder="Buscar por nome ou CPF..."
+              />
+            </div>
+            <button id="btnNovoTutor" class="btn btn-primary">
+              Novo Tutor
+            </button>
+            <button
+              id="btnGerarTutorTeste"
+              class="btn btn-primary"
+              style="margin-left: 10px; background-color: #6c757d"
+            >
+              Gerar Dados de Teste
+            </button>
+            <table>
+              <thead>
+                <tr>
+                  <th class="sortable" data-column="nome">Nome ⇅</th>
+                  <th class="sortable" data-column="telefone">Telefone ⇅</th>
+                  <th class="sortable" data-column="cpf">CPF ⇅</th>
+                  <th class="sortable" data-column="endereco">Endereço ⇅</th>
+                  <th class="sortable" data-column="bairro">Bairro ⇅</th>
+                  <th class="sortable" data-column="cidade">Cidade ⇅</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-tutores">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+            <div id="pagination-controls">
+              <button id="btnPrevPage" class="btn btn-primary">Anterior</button>
+              <span id="pageIndicator">Página 1 de 1</span>
+              <button id="btnNextPage" class="btn btn-primary">Próxima</button>
+            </div>
+          </article>
+
+          <!-- Módulo: Animais -->
+          <article id="view-animais" class="hidden">
+            <h2>Animais Cadastrados</h2>
+            <div class="form-group">
+              <input
+                type="search"
+                id="buscaPet"
+                placeholder="Buscar por nome do pet, espécie ou tutor..."
+              />
+            </div>
+            <button id="btnNovoPet" class="btn btn-primary">Novo Pet</button>
+            <table>
+              <thead>
+                <tr>
+                  <th class="sortable" data-column="tutorNome">Tutor ⇅</th>
+                  <th>Telefone</th>
+                  <th class="sortable" data-column="nome">Nome ⇅</th>
+                  <th class="sortable" data-column="especie">Espécie ⇅</th>
+                  <th class="sortable" data-column="raca">Raça ⇅</th>
+                  <th class="sortable" data-column="nascimento">Idade ⇅</th>
+                  <th class="sortable" data-column="condicaoReprodutiva">
+                    Condição Reprodutiva ⇅
+                  </th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-animais">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+            <div id="pagination-controls-pets">
+              <button id="btnPrevPagePets" class="btn btn-primary">
+                Anterior
+              </button>
+              <span id="pageIndicatorPets">Página 1 de 1</span>
+              <button id="btnNextPagePets" class="btn btn-primary">
+                Próxima
+              </button>
+            </div>
+          </article>
+
+          <!-- Módulo: Formulário Tutor -->
+          <article id="view-form-tutor" class="hidden">
+            <h2>Novo Tutor</h2>
+            <div class="form-group">
+              <label for="nomeTutor">Nome</label>
+              <input type="text" id="nomeTutor" />
+            </div>
+            <div class="form-group">
+              <label for="telefoneTutor">Telefone</label>
+              <input type="text" id="telefoneTutor" />
+            </div>
+            <button id="salvarTutor" class="btn btn-primary">Salvar</button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal de Novo Agendamento -->
+    <div id="modalAgendamento" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h2>Novo Agendamento</h2>
+        <form id="formAgendamento">
+          <div class="form-group">
+            <label for="agendaHora">Hora</label>
+            <input type="time" id="agendaHora" required />
+          </div>
+          <div class="form-group">
+            <label for="agendaAnimal">Nome do Animal</label>
+            <input
+              type="text"
+              id="agendaAnimal"
+              list="listaAnimaisAgenda"
+              required
+              placeholder="Ex: Rex"
+            />
+            <datalist id="listaAnimaisAgenda"></datalist>
+          </div>
+          <div class="form-group">
+            <label for="agendaTutor">Nome do Tutor</label>
+            <input
+              type="text"
+              id="agendaTutor"
+              list="listaTutoresAgenda"
+              required
+              placeholder="Ex: Ana Silva"
+            />
+            <datalist id="listaTutoresAgenda"></datalist>
+          </div>
+          <div class="form-group">
+            <label for="agendaVet">Veterinário</label>
+            <input
+              type="text"
+              id="agendaVet"
+              required
+              placeholder="Ex: Dr. João"
+            />
+          </div>
+          <div class="form-group">
+            <label for="agendaTipo">Tipo de Atendimento</label>
+            <select id="agendaTipo" required>
+              <option value="Consulta">Consulta</option>
+              <option value="Vacina">Vacina</option>
+              <option value="Retorno">Retorno</option>
+              <option value="Exame">Exame</option>
+              <option value="Cirurgia">Cirurgia</option>
+            </select>
+          </div>
+          <div class="btn-toolbar">
+            <button
+              type="button"
+              id="btnCancelarAgenda"
+              class="btn btn-secondary"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Botão de Logout -->
+    <button id="logoutBtn" class="btn-btn-logout">Sair</button>
+
+    <!-- JS -->
+    <script src="JS/auth.js"></script>
+    <script src="JS/home.js"></script>
+  </body>
+</html>

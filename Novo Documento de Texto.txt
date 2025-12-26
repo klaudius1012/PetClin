@@ -1,0 +1,25 @@
+Implemente a funcionalidade de alterar o status do atendimento (ex: de "Aguardando" para "Em Atendimento") na tabela de Recepção.
+
+
+Preencha a página novo-atendimento.html com um formulário completo para cadastro de atendimento.
+
+Implemente a lógica JS para a página novo-atendimento.html salvar o atendimento e redirecionar para a home.
+
+
+Crie uma página de detalhes do atendimento para visualizar as observações cadastradas.
+
+Crie uma validação no formulário para alertar se a temperatura informada indicar febre alta (acima de 39.5°C).
+
+Adicione uma coluna "Prioridade" na tabela de Recepção e destaque as linhas com prioridade "Emergência" em vermelho.
+
+
+
+Crie uma função para excluir registros das tabelas de Tutores e Animais, com confirmação antes de deletar.
+
+
+localStorage.removeItem('tutores') - apaga os dados no local storage
+
+
+reveja funcoes recepcao e parta para atendimento
+
+

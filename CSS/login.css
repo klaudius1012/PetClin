@@ -1,0 +1,95 @@
+@import url("global.css");
+
+
+/* --- Componente: Card de Login (Container Principal) --- */
+.login-card {
+  max-width: 900px;
+  min-height: 400px; /* Exemplo: Define a altura mínima do card aqui */
+}
+
+/* --- Seção Esquerda: Branding e Logo --- */
+.login-left {
+  width: 50%;
+  background: transparent;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.login-left img {
+  max-width: 180px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.login-left h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #0f766e; /* Verde escuro */
+  font-weight: 700;
+}
+
+.login-left p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* --- Seção Direita: Formulário de Login --- */
+.login-right {
+  width: 50%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-header {
+  margin-bottom: 2rem;
+}
+
+.login-header h2 {
+  color: var(--text-color);
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* --- Links Auxiliares (Rodapé do Form) --- */
+.login-links {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.login-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.login-links a:hover {
+  color: #0f766e;
+  text-decoration: underline;
+}
+
+/* --- Responsividade (Mobile) --- */
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    max-width: 400px;
+  }
+  .login-left,
+  .login-right {
+    width: 100%;
+    padding: 2rem;
+  }
+  .login-left {
+    display: none; /* Opcional: esconder a ilustração em mobile para focar no login */
+  }
+}
