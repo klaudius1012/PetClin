@@ -63,8 +63,23 @@
       </section>
     </main>
 
-    <script src="JS/auth.js"></script>
-<script src="JS/login.js"></script>
+    <script src="JS/session-auth.js"></script>
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const user = document.getElementById("username").value;
+          const pass = document.getElementById("password").value;
 
+          if (user && pass) {
+            // Salva na sessão (limpa ao fechar o navegador)
+            sessionStorage.setItem("usuarioLogado", user);
+            window.location.href = "home.html";
+          } else {
+            alert("Por favor, preencha usuário e senha.");
+          }
+        });
+    </script>
   </body>
 </html>
