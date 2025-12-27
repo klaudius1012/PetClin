@@ -1,0 +1,62 @@
+@import url("global.css");
+
+.btn-editar {
+  background: var(--primary-gradient);
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.btn-excluir {
+  background: var(--error-color);
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.btn {
+  width: 140px;
+}
+
+@media print {
+  /* Ocultar menus, botões e sidebar */
+  .sidebar,
+  #logoutBtn,
+  #menuBtn,
+  .btn-toolbar,
+  .header-actions button {
+    display: none !important;
+  }
+
+  /* Resetar estilos de layout para impressão em papel */
+  body {
+    background: #fff !important;
+    height: auto;
+    display: block;
+    color: #000 !important;
+  }
+
+  .login-card {
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+    backdrop-filter: none !important;
+  }
+
+  .content-area {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Melhorar visualização dos dados do paciente e textarea */
+  .card-info {
+    background: transparent !important;
+    border: 1px solid #000 !important;
+  }
+
+  textarea {
+    border: 1px solid #000 !important;
+    resize: none;
+  }
+}
