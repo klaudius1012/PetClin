@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formAgendamento");
   const busca = document.getElementById("buscaAgenda");
   let idEdicao = null;
+  
+  const paginator = new Paginator(5, carregarAgenda);
 
   // Eventos
   if (btnGerar) btnGerar.addEventListener("click", gerarDadosTeste);
@@ -47,7 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (busca) {
-    busca.addEventListener("input", carregarAgenda);
+    busca.addEventListener("input", () => {
+      paginator.reset();
+      carregarAgenda();
+    });
   }
 
   // Carregar dados iniciais por último para garantir que eventos funcionem
@@ -76,7 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ordenar por hora
     filtrados.sort((a, b) => (a.hora || "").localeCompare(b.hora || ""));
 
-    filtrados.forEach((item) => {
+    const { data, totalPages } = paginator.paginate(filtrados);
+
+    data.forEach((item) => {
       const tr = document.createElement("tr");
       tr.style.cursor = "pointer";
       tr.addEventListener("click", (e) => {
@@ -103,6 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       tbody.appendChild(tr);
     });
+
+    paginator.renderControls("pagination", totalPages);
   }
 
   // Preparar modal para edição

@@ -1,3 +1,5 @@
+const paginator = new Paginator(5, carregarAtendimentos);
+
 document.addEventListener("DOMContentLoaded", () => {
   // Funcionalidade do Menu Mobile
   const menuBtn = document.getElementById("menuBtn");
@@ -11,14 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Filtro de busca
   const buscaInput = document.getElementById("buscaRecepcao");
   if (buscaInput) {
-    buscaInput.addEventListener("input", (e) => {
-      const termo = e.target.value.toLowerCase();
-      const linhas = document.querySelectorAll("#tbody-recepcao tr");
-
-      linhas.forEach((linha) => {
-        const texto = linha.innerText.toLowerCase();
-        linha.style.display = texto.includes(termo) ? "" : "none";
-      });
+    buscaInput.addEventListener("input", () => {
+      paginator.reset();
+      carregarAtendimentos();
     });
   }
 
@@ -47,11 +44,16 @@ function carregarAtendimentos() {
   tbody.innerHTML = "";
 
   const atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
+  const buscaInput = document.getElementById("buscaRecepcao");
+  const termo = buscaInput ? buscaInput.value.toLowerCase() : "";
 
-  // Filtra: Status "Aberto" (Aguardando ou Em Atendimento)
+  // Filtra: Status "Aberto" e Busca
   const lista = atendimentos.filter((a) => {
     const isAberto = ["Aguardando", "Em Atendimento"].includes(a.status);
-    return isAberto;
+    const matchBusca =
+      (a.tutor && a.tutor.toLowerCase().includes(termo)) ||
+      (a.animal && a.animal.toLowerCase().includes(termo));
+    return isAberto && matchBusca;
   });
 
   if (lista.length === 0) {
@@ -68,7 +70,9 @@ function carregarAtendimentos() {
     return (a.dataHora || "").localeCompare(b.dataHora || "");
   });
 
-  lista.forEach((a) => {
+  const { data, totalPages } = paginator.paginate(lista);
+
+  data.forEach((a) => {
     const tr = document.createElement("tr");
 
     // Destaque visual para Emergência
@@ -98,6 +102,8 @@ function carregarAtendimentos() {
     `;
     tbody.appendChild(tr);
   });
+
+  paginator.renderControls("pagination", totalPages);
 }
 
 function gerarDadosTeste() {
