@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro de Pet</title>
-    <link rel="stylesheet" href="CSS/pet.css" />
+    <link rel="stylesheet" href="../CSS/pet.css" />
   </head>
   <body>
     <div class="container">
@@ -92,12 +92,21 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-primary">Salvar Pet</button>
+          <div class="form-actions">
+            <button
+              type="button"
+              onclick="window.location.href='home.html'"
+              class="btn btn-secondary"
+            >
+              Voltar
+            </button>
+            <button type="submit" class="btn btn-primary">Salvar Pet</button>
+          </div>
         </form>
       </main>
     </div>
 
-    <script src="JS/session-auth.js"></script>
-    <script src="JS/pet.js"></script>
+    <script src="../JS/session-auth.js"></script>
+    <script src="../JS/pet.js"></script>
   </body>
 </html>

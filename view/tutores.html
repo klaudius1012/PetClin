@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recepção</title>
-
-    <link rel="stylesheet" href="../CSS/recepcao.css" />
+    <title>Home</title>
+    <link rel="stylesheet" href="../CSS/tutores.css" />
   </head>
 
   <body>
@@ -19,8 +18,8 @@
           <li onclick="window.location.href='recepcao.html'">Recepção</li>
           <li onclick="window.location.href='tutores.html'">Tutores</li>
           <li onclick="window.location.href='animais.html'">Animais</li>
-          <li class="disabled">Atendimento</li>
-          <li class="disabled">Vacinas</li>
+          <li class="disabled-item">Atendimento</li>
+          <li class="disabled-item">Vacinas</li>
         </ul>
       </aside>
 
@@ -28,48 +27,36 @@
       <section class="content-area">
         <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
         <div id="conteudoServico" role="tabpanel">
-          <!-- Módulo: Recepção -->
-          <article id="view-recepcao">
-            <h2>Recepção - Atendimentos Abertos</h2>
-            <div class="actions-container">
-              <button
-                class="btn btn-primary"
-                onclick="window.location.href='novo-atendimento.html'"
-              >
-                Novo Atendimento
-              </button>
-              <button id="btnGerarDados" class="btn btn-neutral" style="margin-left: 10px;">Gerar Dados</button>
-              <button
-                id="btnLimparDados"
-                class="btn"
-                style="background-color: #ef4444; margin-left: 10px"
-              >
-                Limpar
-              </button>
-            </div>
-
-            <div class="form-group search-container">
+          <!-- Módulo: Tutores -->
+          <article id="view-tutores">
+            <h2>Tutores Cadastrados</h2>
+            <div class="form-group">
               <input
                 type="search"
-                id="buscaRecepcao"
-                placeholder="Buscar por tutor ou animal..."
-                class="form-control"
+                id="buscaTutor"
+                placeholder="Buscar por nome ou CPF..."
               />
             </div>
-
+            <button
+              class="btn btn-primary"
+              onclick="window.location.href='cadastro_tutor.html'"
+            >
+              Cadastrar Novo Tutor
+            </button>
+            <button id="btnGerarTutores" class="btn btn-neutral btn-space">
+              Gerar Dados
+            </button>
             <table>
               <thead>
                 <tr>
-                  <th>Hora</th>
-                  <th>Tutor</th>
-                  <th>Animal</th>
-                  <th>Veterinário</th>
-                  <th>Prioridade</th>
-                  <th>Status</th>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Telefone</th>
+                  <th>Cidade</th>
                   <th>Ações</th>
                 </tr>
               </thead>
-              <tbody id="tbody-recepcao">
+              <tbody id="tbody-tutores">
                 <!-- Preenchido via JS -->
               </tbody>
             </table>
@@ -85,6 +72,6 @@
     <!-- JS -->
     <script src="../JS/session-auth.js"></script>
     <script src="../JS/pagination.js"></script>
-    <script src="../JS/recepcao.js"></script>
+    <script src="../JS/tutores.js"></script>
   </body>
 </html>

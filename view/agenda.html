@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agenda</title>
-    <link rel="stylesheet" href="../CSS/home.css" />
-    <link rel="stylesheet" href="../CSS/agenda.css" />
+       <link rel="stylesheet" href="../CSS/agenda.css" />
   </head>
   <body>
     <main class="login-card card">
@@ -40,22 +39,10 @@
             <button id="btnNovoAgendamento" class="btn btn-primary">
               Novo Agendamento
             </button>
-            <button
-              id="btnGerarAgendaTeste"
-              class="btn btn-neutral"
-              style="margin-left: 10px"
-            >
+            <button id="btnGerarAgendaTeste" class="btn btn-neutral btn-space">
               Gerar Dados
             </button>
-            <button
-              id="btnLimparAgenda"
-              class="btn btn-primary"
-              style="
-                background-color: #ef4444;
-                border-color: #ef4444;
-                margin-left: 10px;
-              "
-            >
+            <button id="btnLimparAgenda" class="btn btn-danger btn-space">
               Limpar
             </button>
             <table>
@@ -102,6 +89,14 @@
             <datalist id="listaAnimaisAgenda"></datalist>
           </div>
           <div class="form-group">
+            <label for="agendaEspecie">Espécie</label>
+            <input
+              type="text"
+              id="agendaEspecie"
+              placeholder="Ex: Cachorro, Gato"
+            />
+          </div>
+          <div class="form-group">
             <label for="agendaTutor">Nome do Tutor</label>
             <input
               type="text"
@@ -111,6 +106,14 @@
               placeholder="Ex: Ana Silva"
             />
             <datalist id="listaTutoresAgenda"></datalist>
+          </div>
+          <div class="form-group">
+            <label for="agendaTelefone">Telefone</label>
+            <input
+              type="tel"
+              id="agendaTelefone"
+              placeholder="(00) 00000-0000"
+            />
           </div>
           <div class="form-group">
             <label for="agendaVet">Veterinário</label>

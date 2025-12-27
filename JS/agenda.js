@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formAgendamento");
   const busca = document.getElementById("buscaAgenda");
   let idEdicao = null;
-  
+
   const paginator = new Paginator(5, carregarAgenda);
 
   // Eventos
@@ -119,7 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
     idEdicao = item.id;
     document.getElementById("agendaHora").value = item.hora;
     document.getElementById("agendaAnimal").value = item.animal;
+    document.getElementById("agendaEspecie").value = item.especie || "";
     document.getElementById("agendaTutor").value = item.tutor;
+    document.getElementById("agendaTelefone").value = item.telefone || "";
     document.getElementById("agendaVet").value = item.veterinario;
     document.getElementById("agendaTipo").value = item.tipo;
 
@@ -133,7 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const agenda = JSON.parse(localStorage.getItem("agenda")) || [];
     const hora = document.getElementById("agendaHora").value;
     const animal = document.getElementById("agendaAnimal").value;
+    const especie = document.getElementById("agendaEspecie").value;
     const tutor = document.getElementById("agendaTutor").value;
+    const telefone = document.getElementById("agendaTelefone").value;
     const vet = document.getElementById("agendaVet").value;
     const tipo = document.getElementById("agendaTipo").value;
 
@@ -142,7 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (index !== -1) {
         agenda[index].hora = hora;
         agenda[index].animal = animal;
+        agenda[index].especie = especie;
         agenda[index].tutor = tutor;
+        agenda[index].telefone = telefone;
         agenda[index].veterinario = vet;
         agenda[index].tipo = tipo;
       }
@@ -151,11 +157,11 @@ document.addEventListener("DOMContentLoaded", () => {
         id: Date.now().toString(),
         hora,
         animal,
+        especie,
         tutor,
+        telefone,
         veterinario: vet,
         tipo,
-        telefone: "(00) 00000-0000",
-        especie: "Desconhecida",
       });
     }
 
@@ -219,6 +225,16 @@ document.addEventListener("DOMContentLoaded", () => {
         especie: "Gato",
         veterinario: "Dra. Santos",
         tipo: "Cirurgia",
+      },
+      {
+        id: "6",
+        tutor: "Marcos Paulo",
+        telefone: "(11) 94444-6666",
+        animal: "Bob",
+        hora: "16:00",
+        especie: "Cachorro",
+        veterinario: "Dr. Silva",
+        tipo: "Consulta",
       },
     ];
     localStorage.setItem("agenda", JSON.stringify(dados));

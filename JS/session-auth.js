@@ -2,15 +2,20 @@
   const usuario = sessionStorage.getItem("usuarioLogado");
   const path = window.location.pathname;
   const isLoginPage = path.includes("index.html");
+  const isInViewDir = path.includes("/view/") || path.includes("\\view\\");
 
   // Se não estiver logado e não estiver na página de login, redireciona para login
   if (!usuario && !isLoginPage) {
-    window.location.href = "index.html";
+    if (isInViewDir) {
+      window.location.href = "../index.html";
+    } else {
+      window.location.href = "index.html";
+    }
   }
 
   // Se já estiver logado e tentar acessar a página de login, redireciona para home
   if (usuario && isLoginPage) {
-    window.location.href = "home.html";
+    window.location.href = "view/home.html";
   }
 })();
 
@@ -19,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       sessionStorage.removeItem("usuarioLogado");
-      window.location.href = "index.html";
+      window.location.href = "../index.html";
     });
   }
 
