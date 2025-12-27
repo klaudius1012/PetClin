@@ -4,6 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const paginator = new Paginator(5, carregarAtendimentos);
 
+  let currentSortColumn = "dataHora";
+  let currentSortDirection = "desc";
+
+  // Evento: Ordenação ao clicar no cabeçalho
+  document.querySelectorAll("th[data-column]").forEach((th) => {
+    th.addEventListener("click", () => {
+      const column = th.getAttribute("data-column");
+      if (currentSortColumn === column) {
+        currentSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
+      } else {
+        currentSortColumn = column;
+        currentSortDirection = "asc";
+      }
+      carregarAtendimentos();
+    });
+  });
+
   // Evento: Busca
   if (busca) {
     busca.addEventListener("input", () => {
@@ -16,8 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
   tbody.addEventListener("click", (e) => {
     if (e.target && e.target.classList.contains("btn-finalizar")) {
       const id = e.target.getAttribute("data-id");
-      if (confirm("Deseja finalizar o atendimento? O paciente sairá da lista de pendentes.")) {
-        const atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
+      if (
+        confirm(
+          "Deseja finalizar o atendimento? O paciente sairá da lista de pendentes."
+        )
+      ) {
+        const atendimentos =
+          JSON.parse(localStorage.getItem("atendimentos")) || [];
         const index = atendimentos.findIndex((a) => a.id === id);
 
         if (index !== -1) {
@@ -35,6 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function carregarAtendimentos() {
     const atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
+    const animais = JSON.parse(localStorage.getItem("animais")) || [];
+    const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
     const termo = busca ? busca.value.toLowerCase() : "";
 
     tbody.innerHTML = "";
@@ -53,14 +77,58 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Ordenar por data/hora decrescente
-    filtrados.sort((a, b) => b.dataHora.localeCompare(a.dataHora));
+    // Ordenação Dinâmica
+    filtrados.sort((a, b) => {
+      let valA, valB;
+
+      if (currentSortColumn === "idade") {
+        // Lógica específica para idade (baseada em data de nascimento)
+        valA = getNascimento(a, animais, tutores);
+        valB = getNascimento(b, animais, tutores);
+
+        if (!valA && !valB) return 0;
+        if (!valA) return 1;
+        if (!valB) return -1;
+      } else {
+        valA = (a[currentSortColumn] || "").toString().toLowerCase();
+        valB = (b[currentSortColumn] || "").toString().toLowerCase();
+      }
+
+      if (valA < valB) return currentSortDirection === "asc" ? -1 : 1;
+      if (valA > valB) return currentSortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    // Atualizar indicadores visuais no cabeçalho
+    document.querySelectorAll("th[data-column]").forEach((th) => {
+      th.textContent = th.textContent.replace(" ▲", "").replace(" ▼", "");
+      if (th.getAttribute("data-column") === currentSortColumn) {
+        th.textContent += currentSortDirection === "asc" ? " ▲" : " ▼";
+      }
+    });
 
     const { data, totalPages } = paginator.paginate(filtrados);
 
     data.forEach((a) => {
       const [dataStr, horaStr] = (a.dataHora || "T").split("T");
       const tr = document.createElement("tr");
+
+      // Calcular Idade
+      let idadeStr = "--";
+      const tutorEncontrado = tutores.find((t) => t.nome === a.tutor);
+      let animalEncontrado = null;
+
+      if (tutorEncontrado) {
+        animalEncontrado = animais.find(
+          (an) => an.nome === a.animal && an.tutorId == tutorEncontrado.id
+        );
+      }
+      if (!animalEncontrado) {
+        animalEncontrado = animais.find((an) => an.nome === a.animal);
+      }
+      if (animalEncontrado && animalEncontrado.nascimento) {
+        idadeStr = calcularIdade(animalEncontrado.nascimento);
+      }
 
       if (a.prioridade === "Emergência") {
         tr.classList.add("row-emergencia");
@@ -73,11 +141,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${dataStr.split("-").reverse().join("/")} ${horaStr}</td>
         <td>${a.tutor}</td>
         <td>${a.animal}</td>
+        <td>${idadeStr}</td>
         <td>${a.veterinario}</td>
         <td class="${prioridadeClass}">${a.prioridade || "-"}</td>
         <td>${a.status}</td>
         <td>
-          <button class="btn-editar" onclick="window.location.href='prescricao.html?id=${a.id}'">Prescrever</button>
+          <button class="btn-editar" onclick="window.location.href='prescricao.html?id=${
+            a.id
+          }'">Prescrever</button>
           <button class="btn-finalizar" data-id="${a.id}">Finalizar</button>
         </td>
       `;
@@ -85,5 +156,42 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     paginator.renderControls("pagination", totalPages);
+  }
+
+  function calcularIdade(dataNasc) {
+    const hoje = new Date();
+    const nasc = new Date(dataNasc);
+    let idade = hoje.getFullYear() - nasc.getFullYear();
+    const m = hoje.getMonth() - nasc.getMonth();
+
+    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
+      idade--;
+    }
+
+    if (idade === 0) {
+      let meses =
+        (hoje.getFullYear() - nasc.getFullYear()) * 12 +
+        (hoje.getMonth() - nasc.getMonth());
+      if (hoje.getDate() < nasc.getDate()) meses--;
+      return `${meses} meses`;
+    }
+
+    return `${idade} anos`;
+  }
+
+  function getNascimento(atendimento, animais, tutores) {
+    const tutorEncontrado = tutores.find((t) => t.nome === atendimento.tutor);
+    let animalEncontrado = null;
+
+    if (tutorEncontrado) {
+      animalEncontrado = animais.find(
+        (an) =>
+          an.nome === atendimento.animal && an.tutorId == tutorEncontrado.id
+      );
+    }
+    if (!animalEncontrado) {
+      animalEncontrado = animais.find((an) => an.nome === atendimento.animal);
+    }
+    return animalEncontrado ? animalEncontrado.nascimento : null;
   }
 });

@@ -114,7 +114,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${a.raca || "-"}</td>
         <td>${a.tutorNome || "-"}</td>
         <td>
-          <button class="btn-icon" onclick="alert('Funcionalidade de edição em desenvolvimento')" title="Editar" style="cursor:pointer; border:none; background:transparent; margin-right: 5px;">✏️</button>
+          <button class="btn-icon" onclick="window.location.href='editar-pet.html?id=${
+            a.id
+          }'" title="Editar" style="cursor:pointer; border:none; background:transparent; margin-right: 5px;">✏️</button>
           <button class="btn-icon" onclick="excluirAnimal('${
             a.id
           }')" title="Excluir" style="cursor:pointer; border:none; background:transparent;">🗑️</button>

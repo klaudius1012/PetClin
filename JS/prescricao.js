@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Referências aos elementos do DOM (Cabeçalho)
   const elNome = document.getElementById("headerAnimalNome");
   const elIdade = document.getElementById("headerAnimalIdade");
+  const elTutor = document.getElementById("headerTutor");
+  const elTelefone = document.getElementById("headerTelefone");
+  const elFoto = document.getElementById("headerAnimalFoto");
+  const elFotoPlaceholder = document.getElementById("headerAnimalFotoPlaceholder");
+  const elRaca = document.getElementById("headerRaca");
+  const elSexo = document.getElementById("headerSexo");
+  const elPorte = document.getElementById("headerPorte");
+  const elReprodutiva = document.getElementById("headerReprodutiva");
   const elPeso = document.getElementById("headerPeso");
   const elTemp = document.getElementById("headerTemp");
   const elAlergias = document.getElementById("headerAlergias");
@@ -22,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (atendimento) {
     // --- Preencher Cabeçalho ---
     elNome.textContent = atendimento.animal;
+    elTutor.textContent = atendimento.tutor || "--";
     elPeso.textContent = atendimento.peso || "--";
     elTemp.textContent = atendimento.temperatura || "--";
 
@@ -42,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tutorEncontrado = tutores.find((t) => t.nome === atendimento.tutor);
 
     if (tutorEncontrado) {
+      elTelefone.textContent = tutorEncontrado.telefone || "--";
       animalCadastro = animais.find(
         (a) => a.nome === atendimento.animal && a.tutorId == tutorEncontrado.id
       );
@@ -49,6 +59,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!animalCadastro) {
       animalCadastro = animais.find((a) => a.nome === atendimento.animal); // Fallback apenas pelo nome
+      if (!tutorEncontrado) elTelefone.textContent = "--";
+    }
+
+    // Preencher dados extras do animal
+    if (animalCadastro) {
+      elRaca.textContent = animalCadastro.raca || "--";
+      elSexo.textContent = animalCadastro.sexo || "--";
+      elPorte.textContent = animalCadastro.porte || "--";
+      elReprodutiva.textContent = animalCadastro.condicaoReprodutiva || "--";
+    }
+
+    // Exibir Foto se existir
+    if (animalCadastro && animalCadastro.foto) {
+      elFoto.src = animalCadastro.foto;
+      elFoto.style.display = "block";
+      elFotoPlaceholder.style.display = "none";
+    } else {
+      elFoto.style.display = "none";
+      elFotoPlaceholder.style.display = "block";
     }
 
     if (animalCadastro && animalCadastro.nascimento) {

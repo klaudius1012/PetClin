@@ -30,14 +30,76 @@
           <article id="view-prescricao">
             <!-- Cabeçalho do Paciente (Dados do Atendimento) -->
             <div class="atendimento-header">
-              <div class="header-main">
-                <h2 id="headerAnimalNome" class="animal-highlight">
-                  Nome do Animal
-                </h2>
-                <span id="headerAnimalIdade" class="animal-age">Idade: --</span>
+              <div
+                class="header-main"
+                style="flex-direction: row; align-items: center; gap: 1rem"
+              >
+                <div
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    background-color: #f0f0f0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: 2px solid #ddd;
+                    flex-shrink: 0;
+                  "
+                >
+                  <img
+                    id="headerAnimalFoto"
+                    src=""
+                    alt="Foto"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      display: none;
+                    "
+                  />
+                  <span
+                    id="headerAnimalFotoPlaceholder"
+                    style="font-size: 2rem; color: #ccc"
+                    >🐾</span
+                  >
+                </div>
+                <div style="display: flex; flex-direction: column">
+                  <h2 id="headerAnimalNome" class="animal-highlight">
+                    Nome do Animal
+                  </h2>
+                  <span id="headerAnimalIdade" class="animal-age"
+                    >Idade: --</span
+                  >
+                </div>
               </div>
 
               <div class="header-info-grid">
+                <div class="info-item">
+                  <span class="label">Tutor</span>
+                  <span class="value" id="headerTutor">--</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Tel.</span>
+                  <span class="value" id="headerTelefone">--</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Raça</span>
+                  <span class="value" id="headerRaca">--</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Sexo</span>
+                  <span class="value" id="headerSexo">--</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Porte</span>
+                  <span class="value" id="headerPorte">--</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Reprod.</span>
+                  <span class="value" id="headerReprodutiva">--</span>
+                </div>
                 <div class="info-item">
                   <span class="label">Peso</span>
                   <span class="value"><span id="headerPeso">--</span> kg</span>

@@ -1,59 +1,68 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formPet");
-  const inputTutor = document.getElementById("tutorInput");
-  const datalistTutores = document.getElementById("listaTutores");
-  const params = new URLSearchParams(window.location.search);
-  const idEditar = params.get("id");
+  const inputNascimento = document.getElementById("nascimento");
+  const spanIdade = document.getElementById("idade-calculada");
 
-  // Carregar tutores para o datalist
-  const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
+  // Upload de Foto
+  const inputFoto = document.getElementById("foto");
+  const imgPreview = document.getElementById("foto-preview");
+  const placeholder = document.getElementById("foto-placeholder");
+  let fotoBase64 = "";
 
-  tutores.forEach((tutor) => {
-    const option = document.createElement("option");
-    option.value = tutor.nome; // Exibe o nome
-    option.dataset.id = tutor.id; // Guarda o ID (embora datalist não suporte dataset direto na seleção, usamos para busca)
-    datalistTutores.appendChild(option);
+  inputFoto.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 500 * 1024) { // Limite de 500KB para não lotar o localStorage
+        alert("A imagem é muito grande! Por favor, escolha uma imagem menor que 500KB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        fotoBase64 = ev.target.result;
+        imgPreview.src = fotoBase64;
+        imgPreview.style.display = "block";
+        placeholder.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    }
   });
 
-  // Se houver ID na URL, carrega os dados para edição
-  if (idEditar) {
-    const animais = JSON.parse(localStorage.getItem("animais")) || [];
-    const animal = animais.find((a) => a.id === idEditar);
+  // Carregar Tutores para o Datalist
+  const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
+  const datalist = document.getElementById("listaTutores");
 
-    if (animal) {
-      document.querySelector(".header-actions h2").textContent = "Editar Pet";
+  tutores.forEach((t) => {
+    const option = document.createElement("option");
+    option.value = t.nome;
+    option.textContent = `CPF: ${t.cpf}`;
+    datalist.appendChild(option);
+  });
 
-      const tutor = tutores.find((t) => t.id === animal.tutorId);
-      if (tutor) inputTutor.value = tutor.nome;
-
-      document.getElementById("nome").value = animal.nome || "";
-      document.getElementById("especie").value = animal.especie || "";
-      document.getElementById("raca").value = animal.raca || "";
-      document.getElementById("sexo").value = animal.sexo || "";
-      document.getElementById("nascimento").value = animal.nascimento || "";
-      document.getElementById("peso").value = animal.peso || "";
-      document.getElementById("porte").value = animal.porte || "";
-      document.getElementById("condicaoReprodutiva").value =
-        animal.condicaoReprodutiva || "";
+  // Evento: Calcular Idade ao mudar a data
+  inputNascimento.addEventListener("change", () => {
+    if (inputNascimento.value) {
+      spanIdade.textContent = `Idade: ${calcularIdade(inputNascimento.value)}`;
+    } else {
+      spanIdade.textContent = "";
     }
-  }
+  });
 
+  // Evento: Salvar Pet
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Encontrar o tutor selecionado
-    const nomeTutorSelecionado = inputTutor.value;
-    const tutorObj = tutores.find((t) => t.nome === nomeTutorSelecionado);
+    const nomeTutor = document.getElementById("tutorInput").value;
+    const tutorEncontrado = tutores.find((t) => t.nome === nomeTutor);
 
-    if (!tutorObj) {
-      alert("Por favor, selecione um tutor válido da lista.");
+    if (!tutorEncontrado) {
+      alert("Erro: Selecione um tutor válido da lista.");
       return;
     }
 
-    const dadosPet = {
-      id: idEditar || "P" + Date.now(),
-      tutorId: tutorObj.id,
-      tutorNome: tutorObj.nome, // Redundância útil para listagens simples
+    const novoPet = {
+      id: Date.now().toString(),
+      tutorId: tutorEncontrado.id,
+      foto: fotoBase64,
       nome: document.getElementById("nome").value,
       especie: document.getElementById("especie").value,
       raca: document.getElementById("raca").value,
@@ -65,17 +74,31 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const animais = JSON.parse(localStorage.getItem("animais")) || [];
+    animais.push(novoPet);
+    localStorage.setItem("animais", JSON.stringify(animais));
 
-    if (idEditar) {
-      const index = animais.findIndex((a) => a.id === idEditar);
-      if (index !== -1) animais[index] = dadosPet;
-      alert("Pet atualizado com sucesso!");
-    } else {
-      animais.push(dadosPet);
-      alert("Pet cadastrado com sucesso!");
+    alert("Pet cadastrado com sucesso!");
+    window.location.href = "animais.html";
+  });
+
+  function calcularIdade(dataNasc) {
+    const hoje = new Date();
+    const nasc = new Date(dataNasc);
+    let idade = hoje.getFullYear() - nasc.getFullYear();
+    const m = hoje.getMonth() - nasc.getMonth();
+
+    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
+      idade--;
     }
 
-    localStorage.setItem("animais", JSON.stringify(animais));
-    window.location.href = "home.html";
-  });
+    if (idade === 0) {
+      let meses =
+        (hoje.getFullYear() - nasc.getFullYear()) * 12 +
+        (hoje.getMonth() - nasc.getMonth());
+      if (hoje.getDate() < nasc.getDate()) meses--;
+      return `${meses} meses`;
+    }
+
+    return `${idade} anos`;
+  }
 });
