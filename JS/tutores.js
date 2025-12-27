@@ -1,28 +1,85 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Menu Mobile
-  const menuBtn = document.getElementById("menuBtn");
-  const sidebar = document.querySelector(".sidebar");
-  if (menuBtn && sidebar) {
-    menuBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
+  const tbody = document.getElementById("tbody-tutores");
+  const btnGerar = document.getElementById("btnGerarTutores");
+  const btnLimpar = document.getElementById("btnLimparTutores");
+  const busca = document.getElementById("buscaTutor");
+
+  // Instancia o paginador (assumindo que pagination.js foi carregado)
+  const paginator = new Paginator(5, carregarTutores);
+
+  // Evento: Gerar Dados de Teste
+  if (btnGerar) {
+    btnGerar.addEventListener("click", () => {
+      const dadosTeste = [
+        {
+          id: Date.now() + "1",
+          nome: "Ana Silva",
+          cpf: "123.456.789-00",
+          telefone: "(11) 99999-0000",
+          cidade: "São Paulo",
+        },
+        {
+          id: Date.now() + "2",
+          nome: "Carlos Oliveira",
+          cpf: "234.567.890-11",
+          telefone: "(21) 98888-1111",
+          cidade: "Rio de Janeiro",
+        },
+        {
+          id: Date.now() + "3",
+          nome: "Mariana Santos",
+          cpf: "345.678.901-22",
+          telefone: "(31) 97777-2222",
+          cidade: "Belo Horizonte",
+        },
+        {
+          id: Date.now() + "4",
+          nome: "Roberto Costa",
+          cpf: "456.789.012-33",
+          telefone: "(41) 96666-3333",
+          cidade: "Curitiba",
+        },
+        {
+          id: Date.now() + "5",
+          nome: "Fernanda Lima",
+          cpf: "567.890.123-44",
+          telefone: "(51) 95555-4444",
+          cidade: "Porto Alegre",
+        },
+        {
+          id: Date.now() + "6",
+          nome: "Lucas Pereira",
+          cpf: "678.901.234-55",
+          telefone: "(61) 94444-5555",
+          cidade: "Brasília",
+        }
+      ];
+      localStorage.setItem("tutores", JSON.stringify(dadosTeste));
+      carregarTutores();
     });
   }
 
-  const tbody = document.getElementById("tbody-tutores");
-  const busca = document.getElementById("buscaTutor");
-  const btnGerar = document.getElementById("btnGerarTutores");
+  // Evento: Limpar Dados (Solicitado)
+  if (btnLimpar) {
+    btnLimpar.addEventListener("click", () => {
+      if (
+        confirm("Tem certeza que deseja apagar todos os tutores cadastrados?")
+      ) {
+        localStorage.removeItem("tutores");
+        carregarTutores();
+      }
+    });
+  }
 
-  const paginator = new Paginator(5, carregarTutores);
-
-  // Eventos
-  if (busca)
+  // Evento: Busca
+  if (busca) {
     busca.addEventListener("input", () => {
       paginator.reset();
       carregarTutores();
     });
-  if (btnGerar) btnGerar.addEventListener("click", gerarDadosTutores);
+  }
 
-  // Carregar dados iniciais
+  // Carregar dados ao iniciar
   carregarTutores();
 
   function carregarTutores() {
@@ -31,11 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     tbody.innerHTML = "";
 
-    const filtrados = tutores.filter((t) => {
-      const nome = t.nome ? t.nome.toLowerCase() : "";
-      const cpf = t.cpf ? t.cpf : "";
-      return nome.includes(termo) || cpf.includes(termo);
-    });
+    const filtrados = tutores.filter(
+      (t) => t.nome.toLowerCase().includes(termo) || t.cpf.includes(termo)
+    );
 
     if (filtrados.length === 0) {
       tbody.innerHTML =
@@ -43,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Ordenar por nome
+    // Ordenar alfabeticamente
     filtrados.sort((a, b) => a.nome.localeCompare(b.nome));
 
     const { data, totalPages } = paginator.paginate(filtrados);
@@ -56,8 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${t.telefone}</td>
         <td>${t.cidade}</td>
         <td>
-          <button class="btn-editar" onclick="window.location.href='cadastro_tutor.html?id=${t.id}'">Editar</button>
-          <button class="btn-excluir" onclick="excluirTutor('${t.id}')">Excluir</button>
+          <button class="btn-icon" onclick="alert('Funcionalidade de edição em desenvolvimento')" title="Editar" style="cursor:pointer; border:none; background:transparent; margin-right: 5px;">✏️</button>
+          <button class="btn-icon" onclick="excluirTutor('${t.id}')" title="Excluir" style="cursor:pointer; border:none; background:transparent;">🗑️</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -66,94 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
     paginator.renderControls("pagination", totalPages);
   }
 
-  // Expor função de exclusão globalmente
+  // Função global para excluir linha individual
   window.excluirTutor = function (id) {
-    if (confirm("Tem certeza que deseja excluir este tutor?")) {
-      let tutores = JSON.parse(localStorage.getItem("tutores")) || [];
-
-      // Remove o tutor
-      tutores = tutores.filter((t) => t.id !== id);
-      localStorage.setItem("tutores", JSON.stringify(tutores));
-
-      // Remover animais associados a este tutor
-      let animais = JSON.parse(localStorage.getItem("animais")) || [];
-      animais = animais.filter((a) => String(a.tutorId) !== String(id));
-      localStorage.setItem("animais", JSON.stringify(animais));
-
+    if (confirm("Deseja realmente excluir este tutor?")) {
+      const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
+      const novosTutores = tutores.filter((t) => t.id !== id);
+      localStorage.setItem("tutores", JSON.stringify(novosTutores));
       carregarTutores();
     }
   };
-
-  function gerarDadosTutores() {
-    if (
-      confirm(
-        "Isso substituirá a lista atual de tutores por dados de teste. Deseja continuar?"
-      )
-    ) {
-      const tutoresTeste = [
-        {
-          id: "1",
-          nome: "Ana Silva",
-          cpf: "123.456.789-00",
-          telefone: "(11) 99999-1111",
-          cidade: "São Paulo",
-          bairro: "Centro",
-          endereco: "Rua das Flores, 123",
-          nascimento: "1985-04-12",
-        },
-        {
-          id: "2",
-          nome: "Carlos Souza",
-          cpf: "987.654.321-11",
-          telefone: "(21) 98888-2222",
-          cidade: "Rio de Janeiro",
-          bairro: "Copacabana",
-          endereco: "Av. Atlântica, 450",
-          nascimento: "1990-08-25",
-        },
-        {
-          id: "3",
-          nome: "Mariana Oliveira",
-          cpf: "456.789.123-22",
-          telefone: "(31) 97777-3333",
-          cidade: "Belo Horizonte",
-          bairro: "Savassi",
-          endereco: "Rua da Bahia, 1000",
-          nascimento: "1995-02-10",
-        },
-        {
-          id: "4",
-          nome: "Pedro Lima",
-          cpf: "321.654.987-33",
-          telefone: "(41) 96666-4444",
-          cidade: "Curitiba",
-          bairro: "Batel",
-          endereco: "Rua das Palmeiras, 500",
-          nascimento: "1988-11-05",
-        },
-        {
-          id: "5",
-          nome: "Fernanda Costa",
-          cpf: "654.321.987-44",
-          telefone: "(51) 95555-5555",
-          cidade: "Porto Alegre",
-          bairro: "Centro Histórico",
-          endereco: "Av. Borges de Medeiros, 200",
-          nascimento: "1993-05-30",
-        },
-        {
-          id: "6",
-          nome: "Lucas Martins",
-          cpf: "159.753.486-55",
-          telefone: "(41) 94444-6666",
-          cidade: "Curitiba",
-          bairro: "Cidade Industrial",
-          endereco: "Rua das Flores, 789",
-          nascimento: "1992-07-18",
-        },
-      ];
-      localStorage.setItem("tutores", JSON.stringify(tutoresTeste));
-      carregarTutores();
-    }
-  }
 });

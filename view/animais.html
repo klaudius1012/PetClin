@@ -3,17 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Animais</title>
-    <link rel="stylesheet" href="../CSS/home.css" />
+    <title>Animais - PetHosp</title>
+    <link rel="stylesheet" href="../CSS/animais.css" />
   </head>
+
   <body>
-    <div class="content-padding">
-      <button
-        onclick="window.location.href='home.html'"
-        class="btn btn-secondary"
-      >
-        Voltar
-      </button>
-    </div>
+    <main class="login-card card">
+      <!-- Coluna Esquerda: Lista de Serviços -->
+      <aside class="sidebar">
+        <h3>Serviços</h3>
+        <ul id="listaServicos">
+          <li onclick="window.location.href='home.html'">Dashboard</li>
+          <li onclick="window.location.href='agenda.html'">Agenda</li>
+          <li onclick="window.location.href='recepcao.html'">Recepção</li>
+          <li onclick="window.location.href='tutores.html'">Tutores</li>
+          <li onclick="window.location.href='animais.html'">Animais</li>
+          <li onclick="window.location.href='atendimento.html'">Atendimento</li>
+          <li onclick="window.location.href='vacinas.html'">Vacinas</li>
+        </ul>
+      </aside>
+
+      <!-- Coluna Direita: Conteúdo -->
+      <section class="content-area">
+        <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
+        <div id="conteudoServico" role="tabpanel">
+          <!-- Módulo: Animais -->
+          <article id="view-animais">
+            <h2>Animais Cadastrados</h2>
+            <div class="form-group">
+              <input
+                type="search"
+                id="buscaAnimal"
+                placeholder="Buscar por nome, espécie ou tutor..."
+              />
+            </div>
+            <button
+              class="btn btn-primary"
+              onclick="window.location.href='pet.html'"
+            >
+              Cadastrar Novo Animal
+            </button>
+            <button id="btnGerarAnimais" class="btn btn-neutral btn-space">
+              Gerar Dados
+            </button>
+            <button id="btnLimparAnimais" class="btn btn-danger btn-space">
+              Limpar
+            </button>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Espécie</th>
+                  <th>Raça</th>
+                  <th>Tutor</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-animais">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+            <div id="pagination" class="pagination"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Botão de Logout -->
+    <button id="logoutBtn" class="btn-btn-logout">Sair</button>
+
+    <!-- JS -->
+    <script src="../JS/session-auth.js"></script>
+    <script src="../JS/pagination.js"></script>
+    <script src="../JS/animais.js"></script>
   </body>
 </html>

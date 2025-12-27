@@ -1,4 +1,4 @@
-@import url("home.css");
+@import url("global.css");
 
 /* =========================================
    ESTILOS ESPECÍFICOS DA RECEPÇÃO
@@ -9,6 +9,7 @@
   margin-top: 1rem;
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
 /* --- Barra de Busca --- */
@@ -22,6 +23,35 @@
   cursor: default;
   opacity: 0.5;
   pointer-events: none;
+}
+
+/* --- Tabela: Estrutura Geral --- */
+.content-area table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.content-area th,
+.content-area td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.content-area th {
+  background: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.content-area td {
+  background: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-area tr:hover td {
+  background: rgba(255, 255, 255, 0.45);
 }
 
 /* --- Tabela: Linhas e Células --- */
@@ -39,6 +69,10 @@
   text-align: center;
   padding: 2rem;
   color: var(--text-color);
+}
+
+.btn-space {
+  width: 120px;
 }
 
 /* --- Botões da Tabela --- */
@@ -61,7 +95,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 /* --- Paginação --- */

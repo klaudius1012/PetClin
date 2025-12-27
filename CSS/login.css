@@ -1,10 +1,9 @@
 @import url("global.css");
 
-
 /* --- Componente: Card de Login (Container Principal) --- */
 .login-card {
-  max-width: 900px;
-  min-height: 400px; /* Exemplo: Define a altura mínima do card aqui */
+  width: 900px;
+  height: 400px; /* Exemplo: Define a altura mínima do card aqui */
 }
 
 /* --- Seção Esquerda: Branding e Logo --- */
