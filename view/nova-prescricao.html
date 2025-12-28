@@ -3,13 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prescrição - PetClin</title>
+    <title>Nova Prescrição - PetHosp</title>
     <link rel="stylesheet" href="../CSS/nova-prescricao.css" />
   </head>
-
   <body>
     <main class="login-card card">
-      <!-- Coluna Esquerda: Lista de Serviços -->
       <aside class="sidebar">
         <h3>Serviços</h3>
         <ul id="listaServicos">
@@ -23,14 +21,14 @@
         </ul>
       </aside>
 
-      <!-- Coluna Direita: Conteúdo -->
       <section class="content-area">
         <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
-        <div id="conteudoServico" role="tabpanel">
-          <article id="view-nova-prescricao">
+        <div id="conteudoServico">
+          <article>
             <h2>Nova Prescrição</h2>
-            <!-- Cabeçalho do Paciente (Dados do Atendimento) -->
-              <div class="atendimento-header">
+
+            <!-- Header dinâmico (preenchido por shared.js) -->
+          <div class="atendimento-header">
               <div class="header-main header-row">
                 <div class="avatar-container">
                   <img
@@ -56,7 +54,10 @@
                   >
                 </div>
               </div>
-
+              <div class="queixa-container">
+                <span class="queixa-label">Queixa:</span>
+                <span id="headerQueixa" class="queixa-value">--</span>
+              </div>
               <div class="header-info-grid">
                 <div class="info-item">
                   <span class="label">Tutor</span>
@@ -95,47 +96,39 @@
                   <span class="value" id="headerAlergias">--</span>
                 </div>
               </div>
-              <br />
-              <div class="queixa-container">
-                <span class="queixa-label">Queixa:</span>
-                <span id="headerQueixa" class="queixa-value">--</span>
-              </div>
             </div>
 
-            <hr class="divider" />
-
             <form id="formPrescricao">
-              <div id="medicamentos-container">
-                <!-- Itens adicionados via JS -->
-              </div>
+              <h3>Medicamentos</h3>
+              <div id="medicamentos-container"></div>
 
               <button
                 type="button"
                 id="btnAddMedicamento"
-                class="btn btn-secondary btn-add-medicamento"
+                class="btn btn-secondary"
+                style="margin-bottom: 20px"
               >
                 + Adicionar Medicamento
               </button>
 
-              <div class="form-group full-width">
+              <div class="form-group">
                 <label for="observacoes">Observações / Recomendações</label>
                 <textarea
                   id="observacoes"
-                  rows="4"
-                  class="form-control"
+                  placeholder="Digite observações adicionais..."
                 ></textarea>
               </div>
 
-              <div class="form-footer">
+              <div style="display: flex; gap: 10px">
+                <button type="submit" class="btn btn-primary">
+                  Salvar Prescrição
+                </button>
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  class="btn btn-neutral"
                   onclick="history.back()"
                 >
                   Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary">
-                  Salvar Prescrição
                 </button>
               </div>
             </form>
@@ -144,13 +137,68 @@
       </section>
     </main>
 
-    <!-- Botão de Logout -->
-    <button id="logoutBtn" class="btn-btn-logout">Sair</button>
+    <!-- Template da Linha de Medicamento -->
+    <template id="medicamento-template">
+      <div class="medicamento-row">
+        <div class="form-group med-name-group">
+          <label>Medicamento</label>
+          <input
+            type="text"
+            name="nome"
+            class="form-control"
+            required
+            placeholder="Nome do fármaco"
+          />
+        </div>
+        <div class="form-group med-info-group">
+          <label>Dose</label>
+          <div style="display: flex; gap: 5px">
+            <input
+              type="number"
+              name="dose_valor"
+              class="form-control"
+              placeholder="Qtd"
+              step="any"
+            />
+            <select name="dose_unidade" class="form-control">
+              <option value="cp">cp</option>
+              <option value="ml">ml</option>
+              <option value="gotas">gotas</option>
+              <option value="frasco">frasco</option>
+              <option value="amp">amp</option>
+              <option value="mg">mg</option>
+              <option value="g">g</option>
+              <option value="mcg">mcg</option>
+              <option value="UI">UI</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group med-info-group">
+          <label>Frequência</label>
+          <input
+            type="text"
+            name="frequencia"
+            class="form-control"
+            placeholder="Ex: 8/8h"
+          />
+        </div>
+        <div class="form-group med-info-group">
+          <label>Intervalo</label>
+          <input
+            type="text"
+            name="intervalo"
+            class="form-control"
+            placeholder="Ex: 12h"
+          />
+        </div>
+        <button type="button" class="btn-remove-item" title="Remover">
+          🗑️
+        </button>
+      </div>
+    </template>
 
-    <!-- JS -->
     <script src="../JS/session-auth.js"></script>
     <script src="../JS/shared.js"></script>
-    <script src="../JS/pagination.js"></script>
     <script src="../JS/nova-prescricao.js"></script>
   </body>
 </html>

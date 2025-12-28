@@ -1,60 +1,20 @@
 @import url("global.css");
 
-/* Alinhamentos específicos */
-.content-area th:nth-child(1),
-.content-area td:nth-child(1) {
-  width: 80px;
-  text-align: center;
-}
-
-/* Ajuste específico para a coluna Nome na tabela de Tutores */
-#view-tutores th:nth-child(1),
-#view-tutores td:nth-child(1) {
-  width: 250px;
-  text-align: left;
-}
-
-.content-area th:nth-child(5),
-.content-area td:nth-child(5) {
-  text-align: center;
-}
-
-.btn {
-  width: 140px;
-}
-
-#modalAgendamento .btn-toolbar {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-/* =========================================
-   FORMULÁRIO DE PRESCRIÇÃO
-   ========================================= */
 .medicamento-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 10px;
   align-items: flex-end;
-  background: rgba(255, 255, 255, 0.5);
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid var(--border-color, #ddd);
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
 }
 
-.medicamento-row .form-group {
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
+.med-name-group {
+  flex: 2;
 }
 
-.form-control {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+.med-info-group {
+  flex: 1;
 }
 
 .btn-remove-item {
@@ -62,33 +22,14 @@
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #dc2626;
-  padding: 0.5rem;
-  margin-bottom: 2px;
+  margin-bottom: 15px;
 }
 
-.full-width {
+#observacoes {
   width: 100%;
-}
-
-/* Botões e Toolbar */
-.btn-add-medicamento {
-  margin-bottom: 1.5rem;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-/* Estilos para linhas de medicamentos (JS) */
-.med-name-group {
-  flex: 2;
-  min-width: 200px;
-}
-
-.med-info-group {
-  flex: 1;
-  min-width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
 }

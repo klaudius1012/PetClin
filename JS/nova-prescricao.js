@@ -14,28 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para adicionar linha de medicamento
   function addMedicamentoRow() {
-    const row = document.createElement("div");
-    row.classList.add("medicamento-row");
-
-    row.innerHTML = `
-      <div class="form-group med-name-group">
-        <label>Medicamento</label>
-        <input type="text" name="nome" class="form-control" required placeholder="Nome do fármaco">
-      </div>
-      <div class="form-group med-info-group">
-        <label>Dose</label>
-        <input type="text" name="dose" class="form-control" placeholder="Ex: 10mg">
-      </div>
-      <div class="form-group med-info-group">
-        <label>Frequência</label>
-        <input type="text" name="frequencia" class="form-control" placeholder="Ex: 8/8h">
-      </div>
-      <div class="form-group med-info-group">
-        <label>Duração</label>
-        <input type="text" name="duracao" class="form-control" placeholder="Ex: 5 dias">
-      </div>
-      <button type="button" class="btn-remove-item" title="Remover">🗑️</button>
-    `;
+    const template = document.getElementById("medicamento-template");
+    const clone = template.content.cloneNode(true);
+    const row = clone.querySelector(".medicamento-row");
 
     // Evento de remover
     row.querySelector(".btn-remove-item").addEventListener("click", () => {
@@ -60,12 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rows.forEach((row) => {
       const nome = row.querySelector('input[name="nome"]').value;
-      const dose = row.querySelector('input[name="dose"]').value;
+      const doseValor = row.querySelector('input[name="dose_valor"]').value;
+      const doseUnidade = row.querySelector(
+        'select[name="dose_unidade"]'
+      ).value;
       const frequencia = row.querySelector('input[name="frequencia"]').value;
-      const duracao = row.querySelector('input[name="duracao"]').value;
+      const intervalo = row.querySelector('input[name="intervalo"]').value;
+
+      const dose = doseValor ? `${doseValor} ${doseUnidade}` : "";
 
       if (nome) {
-        medicamentos.push({ nome, dose, frequencia, duracao });
+        medicamentos.push({ nome, dose, frequencia, intervalo });
       }
     });
 
