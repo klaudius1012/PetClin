@@ -122,7 +122,7 @@ function carregarHistorico(atendimentoId) {
 
   if (historico.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="3" style="text-align:center">Nenhuma prescrição encontrada para este animal.</td></tr>';
+      '<tr><td colspan="4" style="text-align:center">Nenhuma prescrição encontrada para este animal.</td></tr>';
     return;
   }
 

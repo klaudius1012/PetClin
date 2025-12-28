@@ -3,13 +3,88 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prescrição - PetClin</title>
-    <link rel="stylesheet" href="../CSS/nova-prescricao.css" />
+    <title>Exames - PetHosp</title>
+    <link rel="stylesheet" href="../CSS/prescricao.css" />
+    <style>
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .full-width {
+        grid-column: 1 / -1;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .form-group label {
+        font-weight: bold;
+        color: #333;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: inherit;
+      }
+      .historico-list {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .exame-card {
+        background: #f9f9f9;
+        padding: 1rem;
+        border-left: 4px solid #0f766e;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .exame-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #555;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      .exame-desc {
+        white-space: pre-wrap;
+        color: #333;
+        line-height: 1.5;
+      }
+      .atendimento-mini-header {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .info-item {
+        display: flex;
+        flex-direction: column;
+      }
+      .info-item .label {
+        font-size: 0.8rem;
+        color: #666;
+      }
+      .info-item .value {
+        font-weight: bold;
+        color: #0f766e;
+      }
+    </style>
   </head>
 
   <body>
     <main class="login-card card">
-      <!-- Coluna Esquerda: Lista de Serviços -->
       <aside class="sidebar">
         <h3>Serviços</h3>
         <ul id="listaServicos">
@@ -23,11 +98,12 @@
         </ul>
       </aside>
 
-      <!-- Coluna Direita: Conteúdo -->
       <section class="content-area">
         <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
         <div id="conteudoServico" role="tabpanel">
-          <article id="view-nova-prescricao">
+          <article id="view-exames">
+            <h2>Solicitação de Exames</h2>
+
             <!-- Cabeçalho do Paciente (Dados do Atendimento) -->
             <div class="atendimento-header">
               <div
@@ -115,22 +191,67 @@
               </div>
             </div>
 
-            <hr class="divider" />
+            <form id="formExame">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="tipoExame">Tipo de Exame</label>
+                  <select id="tipoExame" required>
+                    <option value="">Selecione...</option>
+                    <option value="Hemograma Completo">
+                      Hemograma Completo
+                    </option>
+                    <option value="Bioquímico">Bioquímico</option>
+                    <option value="Raio-X">Raio-X</option>
+                    <option value="Ultrassom">Ultrassom</option>
+                    <option value="Urinálise">Urinálise</option>
+                    <option value="Coprocultura">Coprocultura</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="prioridadeExame">Prioridade</label>
+                  <select id="prioridadeExame" required>
+                    <option value="Rotina">Rotina</option>
+                    <option value="Urgente">Urgente</option>
+                  </select>
+                </div>
+                <div class="form-group full-width">
+                  <label for="indicacaoClinica"
+                    >Indicação Clínica / Suspeita</label
+                  >
+                  <textarea
+                    id="indicacaoClinica"
+                    rows="3"
+                    required
+                    placeholder="Motivo da solicitação..."
+                  ></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Solicitar Exame
+              </button>
+            </form>
 
-            <!-- Formulário de Prescrição -->
-          
+            <hr class="divider" style="margin: 2rem 0" />
+            <h3>Exames Solicitados</h3>
+            <div id="listaExames" class="historico-list"></div>
+
+            <button
+              class="btn btn-secondary"
+              onclick="history.back()"
+              style="margin-top: 2rem"
+            >
+              Voltar
+            </button>
           </article>
         </div>
       </section>
     </main>
 
-    <!-- Botão de Logout -->
     <button id="logoutBtn" class="btn-btn-logout">Sair</button>
 
-    <!-- JS -->
     <script src="../JS/session-auth.js"></script>
     <script src="../JS/shared.js"></script>
-    <script src="../JS/pagination.js"></script>
-    <script src="../JS/nova-prescricao.js"></script>
+    <script src="../JS/exames.js"></script>
   </body>
 </html>
