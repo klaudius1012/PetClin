@@ -26,9 +26,9 @@
         <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
         <div id="conteudoServico" role="tabpanel">
           <article id="view-afericoes">
-            <h2>Aferições (Sinais Vitais)</h2>
+            <h2>Aferições / Sinais Vitais</h2>
             <!-- Cabeçalho do Paciente (Dados do Atendimento) -->
-              <div class="atendimento-header">
+            <div class="atendimento-header">
               <div class="header-main header-row">
                 <div class="avatar-container">
                   <img
@@ -99,8 +99,57 @@
                 <span id="headerQueixa" class="queixa-value">--</span>
               </div>
             </div>
-            <p>Módulo em desenvolvimento.</p>
-            <button class="btn btn-secondary" onclick="history.back()">
+
+            <form id="formAfericao">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="dataAfericao">Data</label>
+                  <input type="date" id="dataAfericao" required />
+                </div>
+                <div class="form-group">
+                  <label for="horaAfericao">Hora</label>
+                  <input type="time" id="horaAfericao" required />
+                </div>
+                <div class="form-group">
+                  <label for="tempAfericao">Temperatura (°C)</label>
+                  <input
+                    type="number"
+                    id="tempAfericao"
+                    step="0.1"
+                    placeholder="Ex: 38.5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="fcAfericao">Frequência Cardíaca (bpm)</label>
+                  <input type="number" id="fcAfericao" placeholder="Ex: 100" />
+                </div>
+                <div class="form-group">
+                  <label for="frAfericao">Frequência Respiratória (mpm)</label>
+                  <input type="number" id="frAfericao" placeholder="Ex: 20" />
+                </div>
+                <div class="form-group full-width">
+                  <label for="obsAfericao">Observações</label>
+                  <textarea
+                    id="obsAfericao"
+                    rows="2"
+                    placeholder="Observações adicionais..."
+                  ></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Registrar Aferição
+              </button>
+            </form>
+
+            <hr class="divider divider-spacing" />
+            <h3>Histórico de Aferições</h3>
+            <div id="listaAfericoes" class="historico-list"></div>
+
+            <button
+              class="btn btn-secondary"
+              onclick="history.back()"
+              class="mt-2"
+            >
               Voltar
             </button>
           </article>

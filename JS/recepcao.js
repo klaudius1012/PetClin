@@ -19,20 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Botão Gerar Dados de Teste
-  const btnGerar = document.getElementById("btnGerarDados");
-  if (btnGerar) {
-    btnGerar.addEventListener("click", gerarDadosTeste);
-  }
-
-  // Botão Limpar Dados
-  const btnLimpar = document.getElementById("btnLimparDados");
-  if (btnLimpar) {
-    btnLimpar.addEventListener("click", () => {
-      if (confirm("Tem certeza que deseja limpar todos os atendimentos?")) {
-        localStorage.removeItem("atendimentos");
-        carregarAtendimentos();
-      }
+  // Filtro de Data
+  const dataFiltro = document.getElementById("dataFiltro");
+  if (dataFiltro) {
+    dataFiltro.addEventListener("change", () => {
+      paginator.reset();
+      carregarAtendimentos();
     });
   }
 
@@ -45,15 +37,24 @@ function carregarAtendimentos() {
 
   const atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
   const buscaInput = document.getElementById("buscaRecepcao");
-  const termo = buscaInput ? buscaInput.value.toLowerCase() : "";
+  const dataFiltro = document.getElementById("dataFiltro");
 
-  // Filtra: Status "Aberto" e Busca
+  const termo = buscaInput ? buscaInput.value.toLowerCase() : "";
+  const dataSelecionada = dataFiltro ? dataFiltro.value : "";
+
+  // Filtra:
+  // - Se tem data selecionada: Mostra TUDO daquela data (Histórico)
+  // - Se NÃO tem data: Mostra apenas pendentes (Fila de espera)
   const lista = atendimentos.filter((a) => {
-    const isAberto = ["Aguardando", "Em Atendimento"].includes(a.status);
+    const dataAtendimento = a.dataHora ? a.dataHora.split("T")[0] : "";
+    const matchData = !dataSelecionada || dataAtendimento === dataSelecionada;
+    const isAberto = dataSelecionada
+      ? true
+      : ["Aguardando", "Em Atendimento"].includes(a.status);
     const matchBusca =
       (a.tutor && a.tutor.toLowerCase().includes(termo)) ||
       (a.animal && a.animal.toLowerCase().includes(termo));
-    return isAberto && matchBusca;
+    return isAberto && matchBusca && matchData;
   });
 
   if (lista.length === 0) {
@@ -104,45 +105,6 @@ function carregarAtendimentos() {
   });
 
   paginator.renderControls("pagination", totalPages);
-}
-
-function gerarDadosTeste() {
-  const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
-  const animais = JSON.parse(localStorage.getItem("animais")) || [];
-  const atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
-  const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  const prioridades = ["Rotina", "Urgência", "Emergência"];
-  const vets = ["Dr. Silva", "Dra. Santos", "Dr. Oliveira", "Plantão"];
-
-  for (let i = 0; i < 3; i++) {
-    const hoje = new Date();
-    hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
-    const hora = Math.floor(Math.random() * 12) + 8;
-    const minuto = Math.floor(Math.random() * 60);
-    const dataHoraStr =
-      hoje.toISOString().split("T")[0] +
-      "T" +
-      String(hora).padStart(2, "0") +
-      ":" +
-      String(minuto).padStart(2, "0");
-
-    atendimentos.push({
-      id: "AT" + Date.now() + Math.floor(Math.random() * 1000),
-      tutor: tutores.length > 0 ? random(tutores).nome : "Tutor Teste " + i,
-      animal: animais.length > 0 ? random(animais).nome : "Pet Teste " + i,
-      veterinario: random(vets),
-      dataHora: dataHoraStr,
-      peso: (Math.random() * 20 + 2).toFixed(1),
-      temperatura: (Math.random() * 2 + 37).toFixed(1),
-      prioridade: random(prioridades),
-      status: "Aguardando",
-      queixa: "Gerado automaticamente para teste.",
-      observacoes: "",
-    });
-  }
-  localStorage.setItem("atendimentos", JSON.stringify(atendimentos));
-  carregarAtendimentos();
-  alert("3 atendimentos de teste gerados para hoje!");
 }
 
 window.finalizarAtendimento = function (id) {

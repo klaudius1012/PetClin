@@ -28,7 +28,7 @@
             <h2>Nova Prescrição</h2>
 
             <!-- Header dinâmico (preenchido por shared.js) -->
-          <div class="atendimento-header">
+            <div class="atendimento-header">
               <div class="header-main header-row">
                 <div class="avatar-container">
                   <img
@@ -100,13 +100,44 @@
 
             <form id="formPrescricao">
               <h3>Medicamentos</h3>
+
+              <div class="kits-section">
+                <h4>Modelos / Kits</h4>
+                <div class="kits-controls">
+                  <select id="selectKit" class="form-control">
+                    <option value="">Selecione um modelo...</option>
+                  </select>
+                  <button
+                    type="button"
+                    id="btnCarregarKit"
+                    class="btn btn-neutral"
+                  >
+                    Carregar
+                  </button>
+                  <button
+                    type="button"
+                    id="btnSalvarKit"
+                    class="btn btn-secondary"
+                  >
+                    Salvar Atual como Kit
+                  </button>
+                  <button
+                    type="button"
+                    id="btnExcluirKit"
+                    class="btn btn-danger"
+                    title="Excluir Modelo"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+
               <div id="medicamentos-container"></div>
 
               <button
                 type="button"
                 id="btnAddMedicamento"
                 class="btn btn-secondary"
-                style="margin-bottom: 20px"
               >
                 + Adicionar Medicamento
               </button>
@@ -119,9 +150,16 @@
                 ></textarea>
               </div>
 
-              <div style="display: flex; gap: 10px">
+              <div class="form-actions-row">
                 <button type="submit" class="btn btn-primary">
                   Salvar Prescrição
+                </button>
+                <button
+                  type="button"
+                  id="btnImprimirReceita"
+                  class="btn btn-neutral"
+                >
+                  Imprimir Receita
                 </button>
                 <button
                   type="button"
@@ -139,61 +177,85 @@
 
     <!-- Template da Linha de Medicamento -->
     <template id="medicamento-template">
-      <div class="medicamento-row">
-        <div class="form-group med-name-group">
-          <label>Medicamento</label>
-          <input
-            type="text"
-            name="nome"
-            class="form-control"
-            required
-            placeholder="Nome do fármaco"
-          />
-        </div>
-        <div class="form-group med-info-group">
-          <label>Dose</label>
-          <div style="display: flex; gap: 5px">
+      <div class="medicamento-wrapper">
+        <div class="medicamento-row">
+          <div class="form-group med-name-group">
+            <label>Medicamento</label>
             <input
-              type="number"
-              name="dose_valor"
+              type="text"
+              name="nome"
               class="form-control"
-              placeholder="Qtd"
-              step="any"
+              required
+              placeholder="Nome do fármaco"
             />
-            <select name="dose_unidade" class="form-control">
-              <option value="cp">cp</option>
-              <option value="ml">ml</option>
-              <option value="gotas">gotas</option>
-              <option value="frasco">frasco</option>
-              <option value="amp">amp</option>
-              <option value="mg">mg</option>
-              <option value="g">g</option>
-              <option value="mcg">mcg</option>
-              <option value="UI">UI</option>
-            </select>
           </div>
+          <div class="form-group med-info-group">
+            <label>Dose</label>
+            <div class="med-dose-container">
+              <input
+                type="number"
+                name="dose_valor"
+                class="form-control"
+                placeholder="Qtd"
+                step="any"
+              />
+              <select name="dose_unidade" class="form-control">
+                <option value="cp">cp</option>
+                <option value="ml">ml</option>
+                <option value="gotas">gotas</option>
+                <option value="frasco">frasco</option>
+                <option value="amp">amp</option>
+                <option value="mg">mg</option>
+                <option value="g">g</option>
+                <option value="mcg">mcg</option>
+                <option value="UI">UI</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group med-info-group">
+            <label>Intervalo</label>
+            <select name="intervalo" class="form-control">
+              <option value="">Selecione...</option>
+              <option value="6h / 6h">6h / 6h</option>
+              <option value="8h / 8h">8h / 8h</option>
+              <option value="12h / 12h">12h / 12h</option>
+              <option value="24h / 24h">24h / 24h</option>
+              <option value="Dose única">Dose única</option>
+              <option value="Outro">Outro</option>
+            </select>
+            <input
+              type="text"
+              name="intervalo_custom"
+              class="form-control"
+              style="display: none; margin-top: 5px"
+              placeholder="Digite o intervalo"
+            />
+          </div>
+          <div class="form-group med-info-group">
+            <label>Duração</label>
+            <input
+              type="text"
+              name="duracao"
+              class="form-control"
+              placeholder="Ex: 5 dias"
+            />
+          </div>
+          <button type="button" class="btn-remove-item" title="Remover">
+            🗑️
+          </button>
         </div>
-        <div class="form-group med-info-group">
-          <label>Frequência</label>
+        <div class="justificativa-alergia">
+          <label class="justificativa-label">
+            ⚠️ ALERTA: Paciente alérgico a este medicamento. Justificativa
+            obrigatória:
+          </label>
           <input
             type="text"
-            name="frequencia"
-            class="form-control"
-            placeholder="Ex: 8/8h"
+            name="justificativa"
+            class="form-control justificativa-input"
+            placeholder="Justifique clinicamente o uso..."
           />
         </div>
-        <div class="form-group med-info-group">
-          <label>Intervalo</label>
-          <input
-            type="text"
-            name="intervalo"
-            class="form-control"
-            placeholder="Ex: 12h"
-          />
-        </div>
-        <button type="button" class="btn-remove-item" title="Remover">
-          🗑️
-        </button>
       </div>
     </template>
 

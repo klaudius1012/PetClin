@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputAlergias = document.getElementById("alergias");
   const textQueixa = document.getElementById("queixa");
   const textObservacoes = document.getElementById("observacoes");
+  const inputVacinacao = document.getElementById("vacinacao");
+  const inputAmbiente = document.getElementById("ambiente");
+  const inputAlimentacao = document.getElementById("alimentacao");
+  const alertaVacinacao = document.getElementById("alertaVacinacao");
 
   // Carregar dados do localStorage
   const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
@@ -37,6 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
       '<option value="">Selecione um tutor primeiro...</option>';
     selectAnimal.disabled = true;
     inputPeso.value = "";
+    if (inputVacinacao) {
+      inputVacinacao.value = "";
+      inputVacinacao.classList.remove("input-error");
+    }
+    if (inputAmbiente) inputAmbiente.value = "";
+    if (inputAlimentacao) inputAlimentacao.value = "";
+    if (inputAlergias) inputAlergias.value = "";
+    if (alertaVacinacao) alertaVacinacao.style.display = "none";
     const spanIdade = document.getElementById("spanIdadeAnimal");
     if (spanIdade) spanIdade.textContent = "";
 
@@ -102,6 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     spanIdade.textContent = "";
 
+    // Limpa o alerta de vacinação ao trocar de animal
+    if (alertaVacinacao) alertaVacinacao.style.display = "none";
+    if (inputVacinacao) inputVacinacao.classList.remove("input-error");
+
     if (nomeAnimal && tutorId) {
       const animalEncontrado = animais.find(
         (a) => a.nome === nomeAnimal && a.tutorId == tutorId
@@ -112,6 +128,27 @@ document.addEventListener("DOMContentLoaded", () => {
           spanIdade.textContent = `Idade: ${calcularIdade(
             animalEncontrado.nascimento
           )}`;
+        }
+        if (inputVacinacao)
+          inputVacinacao.value = animalEncontrado.vacinacao || "";
+        if (inputAmbiente)
+          inputAmbiente.value = animalEncontrado.ambiente || "";
+        if (inputAlimentacao)
+          inputAlimentacao.value = animalEncontrado.alimentacao || "";
+        if (inputAlergias)
+          inputAlergias.value = animalEncontrado.alergias || "";
+
+        // Verifica o status da vacina
+        if (animalEncontrado.dataRevacina) {
+          const hoje = new Date();
+          const dataRevacina = new Date(animalEncontrado.dataRevacina);
+          hoje.setHours(0, 0, 0, 0);
+          dataRevacina.setHours(0, 0, 0, 0);
+
+          if (dataRevacina < hoje) {
+            if (alertaVacinacao) alertaVacinacao.style.display = "block";
+            if (inputVacinacao) inputVacinacao.classList.add("input-error");
+          }
         }
       }
     }
@@ -175,6 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
       temperatura: inputTemperatura.value,
       prioridade: selectPrioridade.value,
       alergias: inputAlergias.value,
+      vacinacao: inputVacinacao ? inputVacinacao.value : "",
+      ambiente: inputAmbiente ? inputAmbiente.value : "",
+      alimentacao: inputAlimentacao ? inputAlimentacao.value : "",
       status: "Aguardando",
       queixa: textQueixa.value,
       observacoes: textObservacoes.value,

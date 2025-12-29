@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (filtrados.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="6" style="text-align:center;">Nenhum atendimento encontrado.</td></tr>';
+        '<tr><td colspan="8" style="text-align:center;">Nenhum atendimento encontrado.</td></tr>';
       return;
     }
 

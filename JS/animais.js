@@ -1,140 +1,90 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const tbody = document.getElementById("tbody-animais");
-  const btnGerar = document.getElementById("btnGerarAnimais");
-  const btnLimpar = document.getElementById("btnLimparAnimais");
-  const busca = document.getElementById("buscaAnimal");
-
-  // Instancia o paginador (assumindo que pagination.js foi carregado)
-  const paginator = new Paginator(5, carregarAnimais);
-
-  // Evento: Gerar Dados de Teste
-  if (btnGerar) {
-    btnGerar.addEventListener("click", () => {
-      const dadosTeste = [
-        {
-          id: Date.now() + "1",
-          nome: "Rex",
-          especie: "Cachorro",
-          raca: "Vira-lata",
-          tutorNome: "Ana Silva",
-        },
-        {
-          id: Date.now() + "2",
-          nome: "Mia",
-          especie: "Gato",
-          raca: "Siamês",
-          tutorNome: "Carlos Oliveira",
-        },
-        {
-          id: Date.now() + "3",
-          nome: "Thor",
-          especie: "Cachorro",
-          raca: "Labrador",
-          tutorNome: "Mariana Santos",
-        },
-        {
-          id: Date.now() + "4",
-          nome: "Lola",
-          especie: "Gato",
-          raca: "Persa",
-          tutorNome: "Roberto Costa",
-        },
-        {
-          id: Date.now() + "5",
-          nome: "Bob",
-          especie: "Cachorro",
-          raca: "Poodle",
-          tutorNome: "Fernanda Lima",
-        },
-        {
-          id: Date.now() + "6",
-          nome: "Nina",
-          especie: "Gato",
-          raca: "Maine Coon",
-          tutorNome: "Lucas Pereira",
-        },
-      ];
-      localStorage.setItem("animais", JSON.stringify(dadosTeste));
-      carregarAnimais();
-    });
-  }
-
-  // Evento: Limpar Dados
-  if (btnLimpar) {
-    btnLimpar.addEventListener("click", () => {
-      if (
-        confirm("Tem certeza que deseja apagar todos os animais cadastrados?")
-      ) {
-        localStorage.removeItem("animais");
-        carregarAnimais();
-      }
-    });
-  }
-
-  // Evento: Busca
-  if (busca) {
-    busca.addEventListener("input", () => {
-      paginator.reset();
-      carregarAnimais();
-    });
-  }
-
-  // Carregar dados ao iniciar
   carregarAnimais();
 
-  function carregarAnimais() {
-    const animais = JSON.parse(localStorage.getItem("animais")) || [];
-    const termo = busca ? busca.value.toLowerCase() : "";
+  const buscaInput = document.getElementById("buscaAnimal");
+  if (buscaInput) {
+    buscaInput.addEventListener("input", carregarAnimais);
+  }
+});
 
-    tbody.innerHTML = "";
+function carregarAnimais() {
+  const tbody = document.getElementById("tbody-animais");
+  const termo = document.getElementById("buscaAnimal").value.toLowerCase();
+  const animais = JSON.parse(localStorage.getItem("animais")) || [];
 
-    const filtrados = animais.filter(
-      (a) =>
-        a.nome.toLowerCase().includes(termo) ||
-        a.especie.toLowerCase().includes(termo) ||
-        (a.tutorNome && a.tutorNome.toLowerCase().includes(termo))
+  tbody.innerHTML = "";
+
+  const animaisFiltrados = animais.filter((a) => {
+    const nome = a.nome ? a.nome.toLowerCase() : "";
+    const especie = a.especie ? a.especie.toLowerCase() : "";
+    const tutor = a.tutorNome ? a.tutorNome.toLowerCase() : "";
+    return (
+      nome.includes(termo) || especie.includes(termo) || tutor.includes(termo)
     );
+  });
 
-    if (filtrados.length === 0) {
-      tbody.innerHTML =
-        '<tr><td colspan="5" style="text-align:center;">Nenhum animal encontrado.</td></tr>';
-      return;
-    }
-
-    // Ordenar alfabeticamente
-    filtrados.sort((a, b) => a.nome.localeCompare(b.nome));
-
-    const { data, totalPages } = paginator.paginate(filtrados);
-
-    data.forEach((a) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${a.nome}</td>
-        <td>${a.especie}</td>
-        <td>${a.raca || "-"}</td>
-        <td>${a.tutorNome || "-"}</td>
-        <td>
-          <button class="btn-icon" onclick="window.location.href='editar-pet.html?id=${
-            a.id
-          }'" title="Editar" style="cursor:pointer; border:none; background:transparent; margin-right: 5px;">✏️</button>
-          <button class="btn-icon" onclick="excluirAnimal('${
-            a.id
-          }')" title="Excluir" style="cursor:pointer; border:none; background:transparent;">🗑️</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    paginator.renderControls("pagination", totalPages);
+  if (animaisFiltrados.length === 0) {
+    tbody.innerHTML =
+      '<tr><td colspan="5" style="text-align:center; padding: 15px;">Nenhum animal encontrado.</td></tr>';
+    return;
   }
 
-  // Função global para excluir linha individual
-  window.excluirAnimal = function (id) {
-    if (confirm("Deseja realmente excluir este animal?")) {
-      const animais = JSON.parse(localStorage.getItem("animais")) || [];
-      const novosAnimais = animais.filter((a) => a.id !== id);
-      localStorage.setItem("animais", JSON.stringify(novosAnimais));
-      carregarAnimais();
+  // Ordenar alfabeticamente
+  animaisFiltrados.sort((a, b) => a.nome.localeCompare(b.nome));
+
+  animaisFiltrados.forEach((a) => {
+    const tr = document.createElement("tr");
+
+    // --- LÓGICA DE ALERTA DE VACINAÇÃO ---
+    let alertaVacina = "";
+    if (a.dataRevacina) {
+      const hoje = new Date();
+      const dataRevacina = new Date(a.dataRevacina);
+
+      // Zera horas para comparar apenas datas
+      hoje.setHours(0, 0, 0, 0);
+      dataRevacina.setHours(0, 0, 0, 0);
+
+      if (dataRevacina < hoje) {
+        // Vencida: Adiciona ícone e destaca a linha
+        alertaVacina = `<span title="Vacinação vencida em ${new Date(
+          a.dataRevacina
+        ).toLocaleDateString()}" style="cursor: help; margin-left: 8px; font-size: 1.2em;">⚠️</span>`;
+        tr.style.backgroundColor = "#fff1f2"; // Fundo vermelho claro
+      }
     }
-  };
-});
+    // -------------------------------------
+
+    tr.innerHTML = `
+      <td>
+        <div style="display: flex; align-items: center;">
+          ${a.nome} ${alertaVacina}
+        </div>
+      </td>
+      <td>${a.especie || "-"}</td>
+      <td>${a.raca || "-"}</td>
+      <td>${a.tutorNome || "-"}</td>
+      <td>
+        <button class="btn-icon" onclick="window.location.href='editar-pet.html?id=${
+          a.id
+        }'" title="Editar" style="background:none; border:none; cursor:pointer; font-size: 1.2rem;">✏️</button>
+        <button class="btn-icon" onclick="excluirAnimal('${
+          a.id
+        }')" title="Excluir" style="background:none; border:none; cursor:pointer; font-size: 1.2rem; color: #dc2626;">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function excluirAnimal(id) {
+  if (confirm("Tem certeza que deseja excluir este animal?")) {
+    let animais = JSON.parse(localStorage.getItem("animais")) || [];
+    animais = animais.filter((a) => a.id !== id);
+    localStorage.setItem("animais", JSON.stringify(animais));
+    carregarAnimais();
+  }
+}
+
+// Expor para o escopo global
+window.excluirAnimal = excluirAnimal;

@@ -28,7 +28,7 @@
           <article id="view-procedimentos">
             <h2>Procedimentos</h2>
             <!-- Cabeçalho do Paciente (Dados do Atendimento) -->
-             <div class="atendimento-header">
+            <div class="atendimento-header">
               <div class="header-main header-row">
                 <div class="avatar-container">
                   <img
@@ -99,8 +99,51 @@
                 <span id="headerQueixa" class="queixa-value">--</span>
               </div>
             </div>
-            <p>Módulo em desenvolvimento.</p>
-            <button class="btn btn-secondary" onclick="history.back()">
+
+            <form id="formProcedimento">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="nomeProcedimento">Nome do Procedimento</label>
+                  <input
+                    type="text"
+                    id="nomeProcedimento"
+                    required
+                    placeholder="Ex: Curativo, Sondagem, Limpeza..."
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="dataProcedimento">Data</label>
+                  <input type="date" id="dataProcedimento" required />
+                </div>
+                <div class="form-group">
+                  <label for="horaProcedimento">Hora</label>
+                  <input type="time" id="horaProcedimento" required />
+                </div>
+                <div class="form-group full-width">
+                  <label for="detalhesProcedimento"
+                    >Detalhes / Observações</label
+                  >
+                  <textarea
+                    id="detalhesProcedimento"
+                    rows="3"
+                    placeholder="Detalhes do procedimento realizado..."
+                  ></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Registrar Procedimento
+              </button>
+            </form>
+
+            <hr class="divider divider-spacing" />
+            <h3>Procedimentos Realizados</h3>
+            <div id="listaProcedimentos" class="historico-list"></div>
+
+            <button
+              class="btn btn-secondary"
+              onclick="history.back()"
+              class="mt-2"
+            >
               Voltar
             </button>
           </article>

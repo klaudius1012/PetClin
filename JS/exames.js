@@ -61,16 +61,52 @@ function carregarHistorico(atendimentoId) {
   historico.forEach((ex) => {
     const card = document.createElement("div");
     card.className = "exame-card";
+    // Estilos inline para garantir visual consistente
+    card.style.cssText =
+      "background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-left: 4px solid #0f766e;";
+
     const dataFormatada = new Date(ex.dataSolicitacao).toLocaleString("pt-BR");
 
     card.innerHTML = `
-        <div class="exame-header">
-            <span>${ex.tipo} (${ex.prioridade})</span>
-            <span style="font-size: 0.85rem; font-weight: normal;">${dataFormatada}</span>
+        <div class="exame-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;">
+            <div>
+                <strong style="color: #0f766e; font-size: 1.1rem;">${
+                  ex.tipo
+                }</strong>
+                <span style="background-color: ${
+                  ex.prioridade === "Urgência" ? "#fee2e2" : "#e0f2f1"
+                }; color: ${
+      ex.prioridade === "Urgência" ? "#dc2626" : "#0f766e"
+    }; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: 8px;">${
+      ex.prioridade
+    }</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 0.85rem; color: #666;">${dataFormatada}</span>
+                <button onclick="excluirExame('${
+                  ex.id
+                }')" title="Excluir" style="background: none; border: none; cursor: pointer; font-size: 1.1rem;">🗑️</button>
+            </div>
         </div>
-        <div class="exame-desc"><strong>Indicação:</strong> ${ex.indicacao}</div>
-        <div style="margin-top:0.5rem; font-size:0.85rem; color:#0f766e;">Status: ${ex.status}</div>
+        <div class="exame-desc" style="color: #374151; margin-bottom: 8px;"><strong>Indicação:</strong> ${
+          ex.indicacao
+        }</div>
+        <div style="font-size:0.85rem; color:#6b7280;">Status: <span style="font-weight:bold;">${
+          ex.status
+        }</span></div>
     `;
     container.appendChild(card);
   });
 }
+
+window.excluirExame = function (id) {
+  if (confirm("Tem certeza que deseja cancelar a solicitação deste exame?")) {
+    let exames = JSON.parse(localStorage.getItem("exames")) || [];
+    exames = exames.filter((e) => e.id !== id);
+    localStorage.setItem("exames", JSON.stringify(exames));
+
+    const params = new URLSearchParams(window.location.search);
+    const atendimentoId = params.get("id");
+    carregarHistorico(atendimentoId);
+  }
+};

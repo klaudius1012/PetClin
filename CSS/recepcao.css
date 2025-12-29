@@ -16,6 +16,9 @@
 .search-container {
   margin-top: 1rem;
   margin-bottom: 1.5rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 /* --- Sidebar (Itens Desabilitados) --- */
@@ -36,7 +39,7 @@
 .content-area th,
 .content-area td {
   padding: 0.75rem 1rem;
-  text-align: left;
+  text-align: center;
 }
 
 .content-area th {
@@ -69,8 +72,4 @@
   text-align: center;
   padding: 2rem;
   color: var(--text-color);
-}
-
-.btn-space {
-  width: 120px;
 }
