@@ -26,10 +26,18 @@ Adicione um botão de imprimir na tela de prescrição que gere um PDF simples.
 
 Crie uma lista pré-definida de medicamentos (datalist) para facilitar o preenchimento do campo "Medicamento".
 
-Crie uma lista pré-definida de medicamentos (datalist) para facilitar o preenchimento do campo "Medicamento".
+Crie uma função que salve modelos de prescrição (kits) para doenças comuns e permita carregá-los rapidamente.
 
 
 Crie uma página de dashboard que mostre gráficos simples sobre os atendimentos (ex: atendimentos por dia, tipos de animais).
+
+Adicione um gráfico de linha na página de aferições para visualizar a evolução da temperatura ao longo do tempo.
+
+Crie a página afericoes.html com o formulário correspondente para funcionar com este JS.
+
+Adicione `flex-wrap: wrap` à classe `.actions-container` no CSS para garantir que os botões se ajustem bem em telas menores.
+
+====================
 
 
 

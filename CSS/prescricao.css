@@ -12,6 +12,45 @@
   margin: 0;
 }
 
+.header-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.header-title-row h2 {
+  margin: 0;
+}
+
+.btn_voltar {
+  background: var(--surface);
+  color: var(--text-color);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn_voltar:hover {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-neutral {
+  background-color: #6b7280;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-neutral:hover {
+  background-color: #4b5563;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
 /* =========================================
    ESTILOS DE IMPRESSÃO
    ========================================= */

@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const textQueixa = document.getElementById("queixa");
   const textObservacoes = document.getElementById("observacoes");
   const inputAtendimentoId = document.getElementById("atendimentoId"); // Hidden input
+  const inputAlergias = document.getElementById("alergias");
+  const inputVacinacao = document.getElementById("vacinacao");
+  const inputAmbiente = document.getElementById("ambiente");
+  const inputAlimentacao = document.getElementById("alimentacao");
 
   // Carregar dados do localStorage
   const tutores = JSON.parse(localStorage.getItem("tutores")) || [];
@@ -88,6 +92,17 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     if (tutorSelecionado) {
       popularAnimais(tutorSelecionado.id, atendimentoParaEditar.animal);
+
+      // Preencher dados clínicos do cadastro do animal
+      const animalCadastrado = animais.find(
+        (a) => a.nome === atendimentoParaEditar.animal && a.tutorId == tutorSelecionado.id
+      );
+      if (animalCadastrado) {
+        if (inputAlergias) inputAlergias.value = animalCadastrado.alergias || "";
+        if (inputVacinacao) inputVacinacao.value = animalCadastrado.vacinacao || "";
+        if (inputAmbiente) inputAmbiente.value = animalCadastrado.ambiente || "";
+        if (inputAlimentacao) inputAlimentacao.value = animalCadastrado.alimentacao || "";
+      }
     }
 
     // Preencher os outros campos
@@ -144,6 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
       prioridade: selectPrioridade.value,
       queixa: textQueixa.value,
       observacoes: textObservacoes.value,
+      alergias: inputAlergias ? inputAlergias.value : "",
+      vacinacao: inputVacinacao ? inputVacinacao.value : "",
+      ambiente: inputAmbiente ? inputAmbiente.value : "",
+      alimentacao: inputAlimentacao ? inputAlimentacao.value : "",
     };
 
     localStorage.setItem("atendimentos", JSON.stringify(atendimentos));

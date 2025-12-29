@@ -25,8 +25,16 @@
         <button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
         <div id="conteudoServico">
           <article>
-            <h2>Histórico de Prescrições</h2>
-             <div class="atendimento-header">
+            <button
+              class="btn_voltar"
+              onclick="window.location.href='internacao.html'"
+            >
+              &#8592; Voltar para Internação
+            </button>
+            <div class="header-title-row">
+              <h2>Histórico de Prescrições</h2>
+            </div>
+            <div class="atendimento-header">
               <div class="header-main header-row">
                 <div class="avatar-container">
                   <img
@@ -95,19 +103,43 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="actions-container">
               <button
                 class="btn btn-primary"
                 onclick="window.location.href='nova-prescricao.html'"
               >
-                Nova Prescrição
+                ➕ Nova Prescrição
               </button>
               <button
-                class="btn btn-secondary"
-                onclick="window.location.href='internacao.html'"
+                class="btn btn-neutral"
+                onclick="window.location.href='evolucoes.html' + window.location.search"
               >
-                Voltar para Internação
+                📋 Evolução
+              </button>
+              <button
+                class="btn btn-neutral"
+                onclick="window.location.href='exames.html' + window.location.search"
+              >
+                🔬 Exames
+              </button>
+              <button
+                class="btn btn-neutral"
+                onclick="window.location.href='procedimentos.html' + window.location.search"
+              >
+                💉 Procedimentos
+              </button>
+              <button
+                class="btn btn-neutral"
+                onclick="window.location.href='afericoes.html' + window.location.search"
+              >
+                🌡️ Aferições
+              </button>
+              <button
+                class="btn btn-neutral"
+                onclick="window.location.href='anexos.html' + window.location.search"
+              >
+                📎 Anexos
               </button>
             </div>
 
